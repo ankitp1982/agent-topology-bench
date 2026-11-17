@@ -1,0 +1,11 @@
+{
+  "name": "agent-topology-bench",
+  "version": "0.1.0",
+  "description": "Pre-execution DAG topology scorer and trace replay benchmark for multi-agent workflows",
+  "type": "module",
+  "scripts": {
+    "test": "node --test *.test.ts",
+    "bench": "node run_experiment.ts"
+  },
+  "license": "MIT"
+}
