@@ -22,16 +22,18 @@ Requires Node.js 22.6+ or 24+ (tested on Node `v24.11.1` on macOS Apple Silicon)
 ```bash
 node --test *.test.ts
 node run_experiment.ts
+# Optional: re-record traces/recorded_runs.json against gemini-3.5-flash-lite
+GEMINI_API_KEY=... node trace_recorder.ts
 ```
 
-## Measured Results (24-Task Mixed Suite, Seed 42)
+## Measured Results (9 Recorded `gemini-3.5-flash-lite` Workloads)
 
-| Strategy | Accuracy (%) | Avg Tokens / Task | p95 Route Latency (ms) |
-|---|---|---|---|
-| single_agent | 75.0% | 5013 | 0.0006 ms |
-| parallel_fanout | 66.7% | 9054 | 0.0003 ms |
-| staged_pipeline | 75.0% | 7520 | 0.0001 ms |
-| auto_routed | 95.8% | 5880 | 0.0105 ms |
+| Strategy | Accuracy (%) | Avg Tokens / Task |
+|---|---|---|
+| single_agent | 77.8% | 446 |
+| parallel_fanout | 33.3% | 743 |
+| staged_pipeline | 77.8% | 772 |
+| auto_routed | 88.9% | 564 |
 
 Large-graph scaling on Apple Silicon:
 - 100-node DAG analysis: `0.057 ms`
@@ -40,11 +42,10 @@ Large-graph scaling on Apple Silicon:
 The main takeaway for agent development: prompting harder does not fix a topology mismatch. Pre-flight structural routing takes under `0.02 ms` and cuts out the worst multi-agent token waste on sequential chains.
 
 ## Tradeoffs, Caveats & Next Steps
-- **Why zero external packages:** Keeping `topology.ts` and `replay.ts` in pure TypeScript with Node's built-in test runner means zero `npm install` wait and sub-millisecond startup.
+- **Why zero external packages:** Keeping `topology.ts`, `scheduler.ts`, `trace_recorder.ts`, and `replay.ts` in pure TypeScript with Node's built-in test runner means zero `npm install` wait and sub-millisecond startup.
 - **Caveat:** Assumes the task graph is known before execution. If an agent discovers new subtasks mid-flight via tool calls, the caller has to re-run `analyzeTopology` on the remaining subgraph.
 - **Next up:**
-  - Record live tool-call traces from a real model run into JSON cassettes so `replay.ts` can score real model variance instead of synthetic probabilities (this also convinced me to build a standalone deterministic replay library next).
-  - Weight graph edges by `estimatedTokens` so wide fan-outs stay under per-minute rate limits.
+  - Weight graph edges by `estimatedTokens` in `analyzeTopology` so wide fan-outs stay under per-minute rate limits.
 
 ## License
 MIT
