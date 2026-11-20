@@ -1,4 +1,4 @@
-import { buildBenchmarkWorkloads, runReplaySuite } from "./replay.ts";
+import { loadRecordedTraces, runReplaySuite } from "./replay.ts";
 import { analyzeTopology, type TaskNode } from "./topology.ts";
 
 function measureLargeDagRoutingMs(nodeCount: number): number {
@@ -15,13 +15,13 @@ function measureLargeDagRoutingMs(nodeCount: number): number {
   return Number((performance.now() - t0).toFixed(4));
 }
 
-const workloads = buildBenchmarkWorkloads();
+const dataset = loadRecordedTraces();
 const strategies = ["single_agent", "parallel_fanout", "staged_pipeline", "auto_routed"] as const;
 
 console.log("| Strategy | Accuracy (%) | Avg Tokens / Task | p95 Route Latency (ms) |");
 console.log("|---|---|---|---|");
 for (const strat of strategies) {
-  const res = runReplaySuite(workloads, strat, 42);
+  const res = runReplaySuite(dataset, strat);
   console.log(`| ${res.strategy} | ${res.accuracyRate.toFixed(1)}% | ${res.avgTokens} | ${res.p95RoutingMs} ms |`);
 }
 console.log("");

@@ -1,136 +1,79 @@
-import { analyzeTopology, type ExecutionTopology, type TaskNode } from "./topology.ts";
+import { readFileSync } from "node:fs";
+import { type RecordedDataset, type RecordedRun } from "./trace_recorder.ts";
+import { analyzeTopology, type ExecutionTopology } from "./topology.ts";
 
-export interface WorkloadScenario {
-  name: string;
-  family: "parallel_independent" | "hybrid_pipeline" | "sequential_coupled";
-  nodes: TaskNode[];
-}
+export type { RecordedDataset, RecordedRun, WorkloadScenario } from "./trace_recorder.ts";
 
 export interface SimulationOutcome {
   strategy: ExecutionTopology | "auto_routed";
   accuracyRate: number;
   avgTokens: number;
   p95RoutingMs: number;
+  scoredRuns: number;
 }
 
-function mulberry32(seed: number): () => number {
-  let a = seed >>> 0;
-  return () => {
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
+export class MissingTraceError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "MissingTraceError";
+  }
 }
 
-export function buildBenchmarkWorkloads(): WorkloadScenario[] {
-  const scenarios: WorkloadScenario[] = [];
+const DEFAULT_TRACE_URL = new URL("./traces/recorded_runs.json", import.meta.url);
 
-  for (let i = 0; i < 8; i++) {
-    const count = 4 + (i % 4);
-    const nodes: TaskNode[] = [];
-    for (let k = 0; k < count; k++) {
-      nodes.push({ id: `p_${i}_${k}`, dependsOn: [], estimatedTokens: 700 + k * 90 });
-    }
-    scenarios.push({ name: `parallel_${i}`, family: "parallel_independent", nodes });
+export function loadRecordedTraces(path: string | URL = DEFAULT_TRACE_URL): RecordedDataset {
+  const parsed = JSON.parse(readFileSync(path, "utf8")) as RecordedDataset;
+  if (!Array.isArray(parsed.scenarios) || parsed.scenarios.length === 0 || !Array.isArray(parsed.runs)) {
+    throw new Error("Invalid recorded trace dataset");
   }
-
-  for (let i = 0; i < 8; i++) {
-    const nodes: TaskNode[] = [
-      { id: `h_${i}_a`, dependsOn: [], estimatedTokens: 800 },
-      { id: `h_${i}_b`, dependsOn: [], estimatedTokens: 850 },
-      { id: `h_${i}_c`, dependsOn: [], estimatedTokens: 750 },
-      { id: `h_${i}_synth`, dependsOn: [`h_${i}_a`, `h_${i}_b`, `h_${i}_c`], estimatedTokens: 1100 },
-    ];
-    scenarios.push({ name: `hybrid_${i}`, family: "hybrid_pipeline", nodes });
-  }
-
-  for (let i = 0; i < 8; i++) {
-    const len = 4 + (i % 3);
-    const nodes: TaskNode[] = [];
-    for (let k = 0; k < len; k++) {
-      nodes.push({
-        id: `s_${i}_${k}`,
-        dependsOn: k === 0 ? [] : [`s_${i}_${k - 1}`],
-        estimatedTokens: 950 + k * 120,
-      });
-    }
-    scenarios.push({ name: `sequential_${i}`, family: "sequential_coupled", nodes });
-  }
-
-  return scenarios;
+  return parsed;
 }
 
-function scoreSingleRun(
-  scenario: WorkloadScenario,
-  chosen: ExecutionTopology,
-  rng: () => number,
-): { success: boolean; tokens: number } {
-  const analysis = analyzeTopology(scenario.nodes);
-  const baseTokens = analysis.totalEstimatedTokens;
-
-  // Empirical scaling dynamics from arXiv:2512.08296:
-  // multi-agent fanout boosts parallelizable tasks, degrades tightly coupled sequential chains.
-  let pSuccess = 0.78;
-  let tokenMultiplier = 1.0;
-
-  if (chosen === "single_agent") {
-    pSuccess = scenario.family === "parallel_independent" ? 0.52 : 0.84;
-    tokenMultiplier = 1.05;
-  } else if (chosen === "parallel_fanout") {
-    if (scenario.family === "parallel_independent") {
-      pSuccess = 0.91;
-      tokenMultiplier = 1.38;
-    } else if (scenario.family === "hybrid_pipeline") {
-      pSuccess = 0.62;
-      tokenMultiplier = 1.72;
-    } else {
-      // Sequential chain forced into parallel handoffs suffers severe state-drift degradation.
-      pSuccess = 0.27;
-      tokenMultiplier = 2.45;
-    }
-  } else {
-    pSuccess = scenario.family === "sequential_coupled" ? 0.44 : 0.86;
-    tokenMultiplier = scenario.family === "sequential_coupled" ? 1.95 : 1.32;
-  }
-
-  const jitter = (rng() - 0.5) * 0.04;
-  return {
-    success: rng() < Math.min(0.99, Math.max(0.05, pSuccess + jitter)),
-    tokens: Math.round(baseTokens * tokenMultiplier),
-  };
+function extractSingle(segment: string): string | null {
+  const tagged = segment.match(/ANSWER:\s*([^\n\r|]+)/i);
+  if (tagged?.[1]) return tagged[1].trim().replace(/[.,;]+$/, "").replace(/\s*,\s*/g, ",");
+  const nums = segment.match(/-?\d+(?:\.\d+)?/g);
+  return nums && nums.length > 0 ? nums[nums.length - 1]! : null;
 }
 
-export function runReplaySuite(
-  workloads: WorkloadScenario[],
-  strategy: ExecutionTopology | "auto_routed",
-  seed = 42,
-): SimulationOutcome {
-  const rng = mulberry32(seed);
-  let wins = 0;
-  let totalTokens = 0;
+export function extractAnswer(output: string): string | null {
+  if (!output.trim()) return null;
+  if (output.includes("|")) {
+    const parts = output.split("|").map((p) => extractSingle(p));
+    return parts.every((p) => p !== null) ? parts.join(",") : null;
+  }
+  return extractSingle(output);
+}
+
+export function scoreRecordedRun(run: RecordedRun, expected: string): boolean {
+  if (run.status !== "completed") return false;
+  const actual = extractAnswer(run.output);
+  return actual !== null && actual.toLowerCase() === expected.trim().replace(/\s*,\s*/g, ",").toLowerCase();
+}
+
+export function runReplaySuite(dataset: RecordedDataset, strategy: ExecutionTopology | "auto_routed"): SimulationOutcome {
+  if (dataset.scenarios.length === 0) throw new Error("Trace dataset has no scenarios");
+  const byKey = new Map(dataset.runs.map((r) => [`${r.scenario}::${r.strategy}`, r]));
+  let wins = 0, totalTokens = 0;
   const routingLatenciesMs: number[] = [];
 
-  for (const w of workloads) {
+  for (const s of dataset.scenarios) {
     const t0 = performance.now();
-    const chosen = strategy === "auto_routed" ? analyzeTopology(w.nodes).topology : strategy;
-    const t1 = performance.now();
-    routingLatenciesMs.push(t1 - t0);
-
-    const out = scoreSingleRun(w, chosen, rng);
-    if (out.success) {
-      wins += 1;
-    }
-    totalTokens += out.tokens;
+    const chosen = strategy === "auto_routed" ? analyzeTopology(s.nodes).topology : strategy;
+    routingLatenciesMs.push(performance.now() - t0);
+    const run = byKey.get(`${s.name}::${chosen}`);
+    if (!run) throw new MissingTraceError(`Missing recorded trace for ${s.name} (${chosen})`);
+    if (scoreRecordedRun(run, s.expected)) wins += 1;
+    totalTokens += run.totalTokens;
   }
 
   routingLatenciesMs.sort((a, b) => a - b);
   const p95Idx = Math.min(routingLatenciesMs.length - 1, Math.floor(routingLatenciesMs.length * 0.95));
-
   return {
     strategy,
-    accuracyRate: Number(((wins / workloads.length) * 100).toFixed(1)),
-    avgTokens: Math.round(totalTokens / workloads.length),
+    accuracyRate: Number(((wins / dataset.scenarios.length) * 100).toFixed(1)),
+    avgTokens: Math.round(totalTokens / dataset.scenarios.length),
     p95RoutingMs: Number((routingLatenciesMs[p95Idx] ?? 0).toFixed(4)),
+    scoredRuns: dataset.scenarios.length,
   };
 }
