@@ -1,4 +1,4 @@
-# agent-topology-bench
+`# agent-topology-bench
 
 Tiny pre-execution DAG analyzer and trace replay benchmark for deciding when a workflow should run as a single agent, a parallel fan-out, or a staged pipeline.
 
@@ -26,20 +26,27 @@ node run_experiment.ts
 GEMINI_API_KEY=... node trace_recorder.ts
 ```
 
+Equivalent npm scripts are defined in `package.json` (`npm test`, `npm run bench`).
+
 ## Measured Results (9 Recorded `gemini-3.5-flash-lite` Workloads)
+`run_experiment.ts` replays `traces/recorded_runs.json` across 9 recorded workloads spanning `parallel_independent`, `hybrid_pipeline`, and `sequential_coupled` task graphs (`temperature: 0.1`, `maxOutputTokens: 256`, `maxConcurrency: 1` for `single_agent` and `4` for multi-node strategies):
 
-| Strategy | Accuracy (%) | Avg Tokens / Task |
-|---|---|---|
-| single_agent | 77.8% | 446 |
-| parallel_fanout | 33.3% | 743 |
-| staged_pipeline | 77.8% | 772 |
-| auto_routed | 88.9% | 564 |
+| Strategy | Accuracy (%) | Avg Tokens / Task | p95 Route Latency (ms) |
+|---|---|---|---|
+| single_agent | 77.8% (7/9) | 446 | < 0.02 ms |
+| parallel_fanout | 33.3% (3/9) | 743 | < 0.02 ms |
+| staged_pipeline | 77.8% (7/9) | 772 | < 0.02 ms |
+| auto_routed | 88.9% (8/9) | 564 | < 0.02 ms |
 
-Large-graph scaling on Apple Silicon:
+Large-graph scaling on Apple Silicon (`measureLargeDagRoutingMs` in `run_experiment.ts`):
 - 100-node DAG analysis: `0.057 ms`
 - 1000-node DAG analysis: `0.7339 ms`
 
-The main takeaway for agent development: prompting harder does not fix a topology mismatch. Pre-flight structural routing takes under `0.02 ms` and cuts out the worst multi-agent token waste on sequential chains.
+Notes from the replay numbers:
+- `auto_routed` reaches `88.9%` (`8/9`) accuracy while averaging `564` tokens per task, beating forced `parallel_fanout` (`33.3%`, `743` tokens) by `55.6` percentage points with `24.1%` fewer tokens (`179` fewer tokens per task).
+- Compared to `staged_pipeline` (`77.8%`, `772` tokens), `auto_routed` gains `11.1` percentage points in accuracy and saves `208` tokens per task (`26.9%` fewer tokens) by keeping sequential chains on a single agent.
+- Compared to `single_agent` (`77.8%`, `446` tokens), `auto_routed` gains `11.1` percentage points in accuracy for `+118` avg tokens per task by fanning out independent subtasks.
+- Pre-flight structural routing (`analyzeTopology`) takes under `0.02 ms` p95 across the 9 recorded workloads (exact sub-millisecond values printed by `run_experiment.ts` vary slightly with V8 JIT warmup).
 
 ## Tradeoffs, Caveats & Next Steps
 - **Why zero external packages:** Keeping `topology.ts`, `scheduler.ts`, `trace_recorder.ts`, and `replay.ts` in pure TypeScript with Node's built-in test runner means zero `npm install` wait and sub-millisecond startup.
