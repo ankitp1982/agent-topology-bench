@@ -1,39 +1,614 @@
-{"model":"gemini-3.5-flash-lite","recordedAt":"2026-03-04T18:12:00.000Z","scenarios":[
-{"name":"parallel_0","family":"parallel_independent","expected":"75,99,84,69","nodes":[{"id":"p_0_0","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (14 * 6) - 9"},{"id":"p_0_1","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (23 * 4) + 7"},{"id":"p_0_2","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (19 * 5) - 11"},{"id":"p_0_3","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (17 * 3) + 18"}]},
-{"name":"parallel_1","family":"parallel_independent","expected":"98,103,93,96","nodes":[{"id":"p_1_0","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (16 * 7) - 14"},{"id":"p_1_1","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (28 * 3) + 19"},{"id":"p_1_2","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (15 * 8) - 27"},{"id":"p_1_3","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (21 * 4) + 12"}]},
-{"name":"parallel_2","family":"parallel_independent","expected":"95,131,100,83","nodes":[{"id":"p_2_0","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (18 * 6) - 13"},{"id":"p_2_1","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (24 * 5) + 11"},{"id":"p_2_2","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (13 * 9) - 17"},{"id":"p_2_3","dependsOn":[],"estimatedTokens":120,"prompt":"Compute (27 * 2) + 29"}]},
-{"name":"hybrid_0","family":"hybrid_pipeline","expected":"43","nodes":[{"id":"h_0_a","dependsOn":[],"estimatedTokens":140,"prompt":"Compute a = (12 * 4) + 7"},{"id":"h_0_b","dependsOn":[],"estimatedTokens":140,"prompt":"Compute b = (15 * 3) - 8"},{"id":"h_0_c","dependsOn":[],"estimatedTokens":140,"prompt":"Compute c = (9 * 5) + 4"},{"id":"h_0_s","dependsOn":["h_0_a","h_0_b","h_0_c"],"estimatedTokens":180,"prompt":"Using upstream a, b, c compute (a + b) - c"}]},
-{"name":"hybrid_1","family":"hybrid_pipeline","expected":"153","nodes":[{"id":"h_1_a","dependsOn":[],"estimatedTokens":140,"prompt":"Compute a = (18 * 5) - 12"},{"id":"h_1_b","dependsOn":[],"estimatedTokens":140,"prompt":"Compute b = (11 * 6) + 9"},{"id":"h_1_c","dependsOn":[],"estimatedTokens":140,"prompt":"Compute c = (14 * 4) - 5"},{"id":"h_1_s","dependsOn":["h_1_a","h_1_b","h_1_c"],"estimatedTokens":180,"prompt":"Using upstream a, b, c compute (a - b) * c"}]},
-{"name":"hybrid_2","family":"hybrid_pipeline","expected":"202","nodes":[{"id":"h_2_a","dependsOn":[],"estimatedTokens":140,"prompt":"Compute a = (13 * 7) - 11"},{"id":"h_2_b","dependsOn":[],"estimatedTokens":140,"prompt":"Compute b = (17 * 4) + 6"},{"id":"h_2_c","dependsOn":[],"estimatedTokens":140,"prompt":"Compute c = (19 * 3) - 9"},{"id":"h_2_s","dependsOn":["h_2_a","h_2_b","h_2_c"],"estimatedTokens":180,"prompt":"Using upstream a, b, c compute a + b + c"}]},
-{"name":"sequential_0","family":"sequential_coupled","expected":"104","nodes":[{"id":"s_0_0","dependsOn":[],"estimatedTokens":110,"prompt":"Start with x = 14. Add 9."},{"id":"s_0_1","dependsOn":["s_0_0"],"estimatedTokens":110,"prompt":"Multiply the previous value by 3."},{"id":"s_0_2","dependsOn":["s_0_1"],"estimatedTokens":110,"prompt":"Subtract 17 from the previous value."},{"id":"s_0_3","dependsOn":["s_0_2"],"estimatedTokens":110,"prompt":"Multiply the previous value by 2."}]},
-{"name":"sequential_1","family":"sequential_coupled","expected":"66","nodes":[{"id":"s_1_0","dependsOn":[],"estimatedTokens":110,"prompt":"Start with x = 25. Subtract 7."},{"id":"s_1_1","dependsOn":["s_1_0"],"estimatedTokens":110,"prompt":"Multiply the previous value by 4."},{"id":"s_1_2","dependsOn":["s_1_1"],"estimatedTokens":110,"prompt":"Add 13 to the previous value."},{"id":"s_1_3","dependsOn":["s_1_2"],"estimatedTokens":110,"prompt":"Subtract 19 from the previous value."}]},
-{"name":"sequential_2","family":"sequential_coupled","expected":"135","nodes":[{"id":"s_2_0","dependsOn":[],"estimatedTokens":110,"prompt":"Start with x = 19. Multiply by 2."},{"id":"s_2_1","dependsOn":["s_2_0"],"estimatedTokens":110,"prompt":"Add 15 to the previous value."},{"id":"s_2_2","dependsOn":["s_2_1"],"estimatedTokens":110,"prompt":"Multiply the previous value by 3."},{"id":"s_2_3","dependsOn":["s_2_2"],"estimatedTokens":110,"prompt":"Subtract 24 from the previous value."}]}
-],"runs":[
-{"scenario":"parallel_0","strategy":"single_agent","output":"Step 1: 75\nStep 2: 99\nStep 3: 84\nStep 4: 69\nANSWER: 75,99,84,69","promptTokens":342,"completionTokens":96,"totalTokens":438,"status":"completed","waves":1,"durationMs":412},
-{"scenario":"parallel_0","strategy":"parallel_fanout","output":"ANSWER: 75 | ANSWER: 99 | ANSWER: 84 | ANSWER: 69","promptTokens":476,"completionTokens":88,"totalTokens":564,"status":"completed","waves":1,"durationMs":248},
-{"scenario":"parallel_0","strategy":"staged_pipeline","output":"ANSWER: 75 | ANSWER: 99 | ANSWER: 84 | ANSWER: 69","promptTokens":480,"completionTokens":92,"totalTokens":572,"status":"completed","waves":1,"durationMs":255},
-{"scenario":"parallel_1","strategy":"single_agent","output":"1: 98, 2: 103, 3: 94, 4: 96\nANSWER: 98,103,94,96","promptTokens":358,"completionTokens":104,"totalTokens":462,"status":"completed","waves":1,"durationMs":430},
-{"scenario":"parallel_1","strategy":"parallel_fanout","output":"ANSWER: 98 | ANSWER: 103 | ANSWER: 93 | ANSWER: 96","promptTokens":488,"completionTokens":92,"totalTokens":580,"status":"completed","waves":1,"durationMs":262},
-{"scenario":"parallel_1","strategy":"staged_pipeline","output":"ANSWER: 98 | ANSWER: 103 | ANSWER: 93 | ANSWER: 96","promptTokens":492,"completionTokens":96,"totalTokens":588,"status":"completed","waves":1,"durationMs":270},
-{"scenario":"parallel_2","strategy":"single_agent","output":"ANSWER: 95,131,100,83","promptTokens":348,"completionTokens":98,"totalTokens":446,"status":"completed","waves":1,"durationMs":398},
-{"scenario":"parallel_2","strategy":"parallel_fanout","output":"ANSWER: 95 | ANSWER: 131 | ANSWER: 100 | ANSWER: 83","promptTokens":472,"completionTokens":84,"totalTokens":556,"status":"completed","waves":1,"durationMs":241},
-{"scenario":"parallel_2","strategy":"staged_pipeline","output":"ANSWER: 95 | ANSWER: 131 | ANSWER: 100 | ANSWER: 83","promptTokens":478,"completionTokens":90,"totalTokens":568,"status":"completed","waves":1,"durationMs":249},
-{"scenario":"hybrid_0","strategy":"single_agent","output":"a=55, b=37, c=49, (55+37)-49=43\nANSWER: 43","promptTokens":382,"completionTokens":106,"totalTokens":488,"status":"completed","waves":1,"durationMs":452},
-{"scenario":"hybrid_0","strategy":"parallel_fanout","output":"Missing upstream values for a, b, c. Cannot compute exact sum.\nANSWER: 0","promptTokens":610,"completionTokens":132,"totalTokens":742,"status":"completed","waves":1,"durationMs":310},
-{"scenario":"hybrid_0","strategy":"staged_pipeline","output":"Upstream gives a=55, b=37, c=49. 92 - 49 = 43.\nANSWER: 43","promptTokens":590,"completionTokens":128,"totalTokens":718,"status":"completed","waves":2,"durationMs":488},
-{"scenario":"hybrid_1","strategy":"single_agent","output":"a=78, b=76, c=51, (78-76)*51=102\nANSWER: 102","promptTokens":392,"completionTokens":112,"totalTokens":504,"status":"completed","waves":1,"durationMs":468},
-{"scenario":"hybrid_1","strategy":"parallel_fanout","output":"a, b, c were not provided in upstream context.\nANSWER: 120","promptTokens":624,"completionTokens":136,"totalTokens":760,"status":"completed","waves":1,"durationMs":322},
-{"scenario":"hybrid_1","strategy":"staged_pipeline","output":"78 - 75 = 3, 3 * 51 = 153.\nANSWER: 153","promptTokens":604,"completionTokens":130,"totalTokens":734,"status":"completed","waves":2,"durationMs":504},
-{"scenario":"hybrid_2","strategy":"single_agent","output":"80 + 74 + 48 = 202\nANSWER: 202","promptTokens":386,"completionTokens":106,"totalTokens":492,"status":"completed","waves":1,"durationMs":444},
-{"scenario":"hybrid_2","strategy":"parallel_fanout","output":"No upstream outputs available to sum.\nANSWER: 150","promptTokens":618,"completionTokens":134,"totalTokens":752,"status":"completed","waves":1,"durationMs":315},
-{"scenario":"hybrid_2","strategy":"staged_pipeline","output":"80 + 74 + 48 = 204\nANSWER: 204","promptTokens":612,"completionTokens":134,"totalTokens":746,"status":"completed","waves":2,"durationMs":512},
-{"scenario":"sequential_0","strategy":"single_agent","output":"14+9=23 -> *3=69 -> -17=52 -> *2=104\nANSWER: 104","promptTokens":294,"completionTokens":88,"totalTokens":382,"status":"completed","waves":1,"durationMs":364},
-{"scenario":"sequential_0","strategy":"parallel_fanout","output":"No previous value provided; assuming 0.\nANSWER: 0","promptTokens":742,"completionTokens":154,"totalTokens":896,"status":"completed","waves":1,"durationMs":290},
-{"scenario":"sequential_0","strategy":"staged_pipeline","output":"52 * 2 = 104\nANSWER: 104","promptTokens":812,"completionTokens":172,"totalTokens":984,"status":"completed","waves":4,"durationMs":890},
-{"scenario":"sequential_1","strategy":"single_agent","output":"25-7=18 -> *4=72 -> +13=85 -> -19=66\nANSWER: 66","promptTokens":302,"completionTokens":92,"totalTokens":394,"status":"completed","waves":1,"durationMs":376},
-{"scenario":"sequential_1","strategy":"parallel_fanout","output":"Previous value missing in parallel fanout.\nANSWER: -19","promptTokens":754,"completionTokens":158,"totalTokens":912,"status":"completed","waves":1,"durationMs":296},
-{"scenario":"sequential_1","strategy":"staged_pipeline","output":"Upstream gave 85; 85 - 19 = 66.\nANSWER: 66","promptTokens":836,"completionTokens":176,"totalTokens":1012,"status":"completed","waves":4,"durationMs":918},
-{"scenario":"sequential_2","strategy":"single_agent","output":"19*2=38 -> +15=53 -> *3=159 -> -24=135\nANSWER: 135","promptTokens":312,"completionTokens":94,"totalTokens":406,"status":"completed","waves":1,"durationMs":388},
-{"scenario":"sequential_2","strategy":"parallel_fanout","output":"Missing upstream state for step 4.\nANSWER: 24","promptTokens":766,"completionTokens":162,"totalTokens":928,"status":"completed","waves":1,"durationMs":304},
-{"scenario":"sequential_2","strategy":"staged_pipeline","output":"157 - 24 = 133\nANSWER: 133","promptTokens":848,"completionTokens":178,"totalTokens":1026,"status":"completed","waves":4,"durationMs":934}
-]}
+{
+  "model": "gemini-3.5-flash-lite",
+  "recordedAt": "2026-11-22T17:58:16.297Z",
+  "scenarios": [
+    {
+      "name": "parallel_0",
+      "family": "parallel_independent",
+      "expected": "75,99,84,69",
+      "nodes": [
+        {
+          "id": "p_0_0",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (14 * 6) - 9"
+        },
+        {
+          "id": "p_0_1",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (23 * 4) + 7"
+        },
+        {
+          "id": "p_0_2",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (19 * 5) - 11"
+        },
+        {
+          "id": "p_0_3",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (17 * 3) + 18"
+        }
+      ]
+    },
+    {
+      "name": "parallel_1",
+      "family": "parallel_independent",
+      "expected": "98,103,93,96",
+      "nodes": [
+        {
+          "id": "p_1_0",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (16 * 7) - 14"
+        },
+        {
+          "id": "p_1_1",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (28 * 3) + 19"
+        },
+        {
+          "id": "p_1_2",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (15 * 8) - 27"
+        },
+        {
+          "id": "p_1_3",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (21 * 4) + 12"
+        }
+      ]
+    },
+    {
+      "name": "parallel_2",
+      "family": "parallel_independent",
+      "expected": "95,131,100,83",
+      "nodes": [
+        {
+          "id": "p_2_0",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (18 * 6) - 13"
+        },
+        {
+          "id": "p_2_1",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (24 * 5) + 11"
+        },
+        {
+          "id": "p_2_2",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (13 * 9) - 17"
+        },
+        {
+          "id": "p_2_3",
+          "dependsOn": [],
+          "estimatedTokens": 120,
+          "prompt": "Compute (27 * 2) + 29"
+        }
+      ]
+    },
+    {
+      "name": "hybrid_0",
+      "family": "hybrid_pipeline",
+      "expected": "43",
+      "nodes": [
+        {
+          "id": "h_0_a",
+          "dependsOn": [],
+          "estimatedTokens": 140,
+          "prompt": "Compute a = (12 * 4) + 7"
+        },
+        {
+          "id": "h_0_b",
+          "dependsOn": [],
+          "estimatedTokens": 140,
+          "prompt": "Compute b = (15 * 3) - 8"
+        },
+        {
+          "id": "h_0_c",
+          "dependsOn": [],
+          "estimatedTokens": 140,
+          "prompt": "Compute c = (9 * 5) + 4"
+        },
+        {
+          "id": "h_0_s",
+          "dependsOn": [
+            "h_0_a",
+            "h_0_b",
+            "h_0_c"
+          ],
+          "estimatedTokens": 180,
+          "prompt": "Using upstream a, b, c compute (a + b) - c"
+        }
+      ]
+    },
+    {
+      "name": "hybrid_1",
+      "family": "hybrid_pipeline",
+      "expected": "153",
+      "nodes": [
+        {
+          "id": "h_1_a",
+          "dependsOn": [],
+          "estimatedTokens": 140,
+          "prompt": "Compute a = (18 * 5) - 12"
+        },
+        {
+          "id": "h_1_b",
+          "dependsOn": [],
+          "estimatedTokens": 140,
+          "prompt": "Compute b = (11 * 6) + 9"
+        },
+        {
+          "id": "h_1_c",
+          "dependsOn": [],
+          "estimatedTokens": 140,
+          "prompt": "Compute c = (14 * 4) - 5"
+        },
+        {
+          "id": "h_1_s",
+          "dependsOn": [
+            "h_1_a",
+            "h_1_b",
+            "h_1_c"
+          ],
+          "estimatedTokens": 180,
+          "prompt": "Using upstream a, b, c compute (a - b) * c"
+        }
+      ]
+    },
+    {
+      "name": "hybrid_2",
+      "family": "hybrid_pipeline",
+      "expected": "202",
+      "nodes": [
+        {
+          "id": "h_2_a",
+          "dependsOn": [],
+          "estimatedTokens": 140,
+          "prompt": "Compute a = (13 * 7) - 11"
+        },
+        {
+          "id": "h_2_b",
+          "dependsOn": [],
+          "estimatedTokens": 140,
+          "prompt": "Compute b = (17 * 4) + 6"
+        },
+        {
+          "id": "h_2_c",
+          "dependsOn": [],
+          "estimatedTokens": 140,
+          "prompt": "Compute c = (19 * 3) - 9"
+        },
+        {
+          "id": "h_2_s",
+          "dependsOn": [
+            "h_2_a",
+            "h_2_b",
+            "h_2_c"
+          ],
+          "estimatedTokens": 180,
+          "prompt": "Using upstream a, b, c compute a + b + c"
+        }
+      ]
+    },
+    {
+      "name": "sequential_0",
+      "family": "sequential_coupled",
+      "expected": "104",
+      "nodes": [
+        {
+          "id": "s_0_0",
+          "dependsOn": [],
+          "estimatedTokens": 110,
+          "prompt": "Start with x = 14. Add 9."
+        },
+        {
+          "id": "s_0_1",
+          "dependsOn": [
+            "s_0_0"
+          ],
+          "estimatedTokens": 110,
+          "prompt": "Multiply the previous value by 3."
+        },
+        {
+          "id": "s_0_2",
+          "dependsOn": [
+            "s_0_1"
+          ],
+          "estimatedTokens": 110,
+          "prompt": "Subtract 17 from the previous value."
+        },
+        {
+          "id": "s_0_3",
+          "dependsOn": [
+            "s_0_2"
+          ],
+          "estimatedTokens": 110,
+          "prompt": "Multiply the previous value by 2."
+        }
+      ]
+    },
+    {
+      "name": "sequential_1",
+      "family": "sequential_coupled",
+      "expected": "66",
+      "nodes": [
+        {
+          "id": "s_1_0",
+          "dependsOn": [],
+          "estimatedTokens": 110,
+          "prompt": "Start with x = 25. Subtract 7."
+        },
+        {
+          "id": "s_1_1",
+          "dependsOn": [
+            "s_1_0"
+          ],
+          "estimatedTokens": 110,
+          "prompt": "Multiply the previous value by 4."
+        },
+        {
+          "id": "s_1_2",
+          "dependsOn": [
+            "s_1_1"
+          ],
+          "estimatedTokens": 110,
+          "prompt": "Add 13 to the previous value."
+        },
+        {
+          "id": "s_1_3",
+          "dependsOn": [
+            "s_1_2"
+          ],
+          "estimatedTokens": 110,
+          "prompt": "Subtract 19 from the previous value."
+        }
+      ]
+    },
+    {
+      "name": "sequential_2",
+      "family": "sequential_coupled",
+      "expected": "135",
+      "nodes": [
+        {
+          "id": "s_2_0",
+          "dependsOn": [],
+          "estimatedTokens": 110,
+          "prompt": "Start with x = 19. Multiply by 2."
+        },
+        {
+          "id": "s_2_1",
+          "dependsOn": [
+            "s_2_0"
+          ],
+          "estimatedTokens": 110,
+          "prompt": "Add 15 to the previous value."
+        },
+        {
+          "id": "s_2_2",
+          "dependsOn": [
+            "s_2_1"
+          ],
+          "estimatedTokens": 110,
+          "prompt": "Multiply the previous value by 3."
+        },
+        {
+          "id": "s_2_3",
+          "dependsOn": [
+            "s_2_2"
+          ],
+          "estimatedTokens": 110,
+          "prompt": "Subtract 24 from the previous value."
+        }
+      ]
+    }
+  ],
+  "runs": [
+    {
+      "scenario": "parallel_0",
+      "strategy": "single_agent",
+      "output": "To solve the problem, let's complete each step in order:\n\nStep 1 (p_0_0): Compute (14 * 6) - 9\n14 * 6 = 84\n84 - 9 = 75\n\nStep 2 (p_0_1): Compute (23 * 4) + 7\n23 * 4 = 92\n92 + 7 = 99\n\nStep 3 (p_0_2): Compute (19 * 5) - 11\n19 * 5 = 95\n95 - 11 = 84\n\nStep 4 (p_0_3): Compute (17 * 3) + 18\n17 * 3 = 51\n51 + 18 = 69\n\nANSWER: 69",
+      "promptTokens": 111,
+      "completionTokens": 192,
+      "totalTokens": 303,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 901
+    },
+    {
+      "scenario": "parallel_0",
+      "strategy": "parallel_fanout",
+      "output": "To compute $(14 \\times 6) - 9$:\n\n1. First, calculate $14 \\times 6$:\n   $14 \\times 6 = 84$\n\n2. Next, subtract $9$ from $84$:\n   $84 - 9 = 75$\n\nANSWER: 75 | To compute $(23 \\times 4) + 7$, follow these steps:\n\n1. Multiply 23 by 4:\n   $23 \\times 4 = 92$\n\n2. Add 7 to the result:\n   $92 + 7 = 99$\n\nANSWER: 99 | To compute (19 * 5) - 11, we follow these steps:\n\n1. Multiply 19 by 5:\n   $$19 \\times 5 = 95$$\n\n2. Subtract 11 from the result:\n   $$95 - 11 = 84$$\n\nANSWER: 84 | To compute the value of $(17 \\times 3) + 18$, we follow these steps:\n\n1. Multiply $17$ by $3$:\n   $$17 \\times 3 = 51$$\n\n2. Add $18$ to the result:\n   $$51 + 18 = 69$$\n\nANSWER: 69",
+      "promptTokens": 78,
+      "completionTokens": 303,
+      "totalTokens": 381,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 656
+    },
+    {
+      "scenario": "parallel_0",
+      "strategy": "staged_pipeline",
+      "output": "To compute the expression $(14 \\times 6) - 9$:\n\n1. First, multiply $14$ by $6$:\n   $$14 \\times 6 = 84$$\n\n2. Then, subtract $9$ from the result:\n   $$84 - 9 = 75$$\n\nANSWER: 75 | To compute $(23 \\times 4) + 7$, follow these steps:\n\n1. Multiply 23 by 4:\n   $23 \\times 4 = 92$\n\n2. Add 7 to the result:\n   $92 + 7 = 99$\n\nANSWER: 99 | To compute $(19 \\times 5) - 11$, follow these steps:\n\n1. Multiply $19$ by $5$:\n   $$19 \\times 5 = 95$$\n\n2. Subtract $11$ from $95$:\n   $$95 - 11 = 84$$\n\nANSWER: 84 | To compute the expression $(17 \\times 3) + 18$, follow these steps:\n\n1. Multiply $17$ by $3$:\n   $$17 \\times 3 = 51$$\n\n2. Add $18$ to the result:\n   $$51 + 18 = 69$$\n\nANSWER: 69",
+      "promptTokens": 78,
+      "completionTokens": 305,
+      "totalTokens": 383,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 674
+    },
+    {
+      "scenario": "parallel_1",
+      "strategy": "single_agent",
+      "output": "Step 1 (p_1_0): Compute (16 * 7) - 14\n16 * 7 = 112\n112 - 14 = 98\n\nStep 2 (p_1_1): Compute (28 * 3) + 19\n28 * 3 = 84\n84 + 19 = 103\n\nStep 3 (p_1_2): Compute (15 * 8) - 27\n15 * 8 = 120\n120 - 27 = 93\n\nStep 4 (p_1_3): Compute (21 * 4) + 12\n21 * 4 = 84\n84 + 12 = 96\n\nANSWER: 96",
+      "promptTokens": 113,
+      "completionTokens": 186,
+      "totalTokens": 299,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 629
+    },
+    {
+      "scenario": "parallel_1",
+      "strategy": "parallel_fanout",
+      "output": "To compute the value, follow these steps:\n\n1. Multiply 16 by 7:\n   $16 \\times 7 = 112$\n\n2. Subtract 14 from the result:\n   $112 - 14 = 98$\n\nANSWER: 98 | To compute $(28 \\times 3) + 19$:\n\n1. First, calculate $28 \\times 3$:\n   $28 \\times 3 = 84$\n\n2. Next, add 19 to the result:\n   $84 + 19 = 103$\n\nANSWER: 103 | To compute $(15 \\times 8) - 27$, follow these steps:\n\n1. Multiply 15 by 8:\n   $$15 \\times 8 = 120$$\n\n2. Subtract 27 from the result:\n   $$120 - 27 = 93$$\n\nANSWER: 93 | To compute (21 * 4) + 12:\n\n1. First, multiply 21 by 4:\n   21 * 4 = 84\n\n2. Next, add 12 to the result:\n   84 + 12 = 96\n\nANSWER: 96",
+      "promptTokens": 80,
+      "completionTokens": 291,
+      "totalTokens": 371,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 617
+    },
+    {
+      "scenario": "parallel_1",
+      "strategy": "staged_pipeline",
+      "output": "To compute $(16 \\times 7) - 14$:\n\n1. First, calculate $16 \\times 7$:\n   $16 \\times 7 = 112$\n\n2. Next, subtract 14 from 112:\n   $112 - 14 = 98$\n\nANSWER: 98 | To compute $(28 \\times 3) + 19$:\n\n1. First, multiply $28$ by $3$:\n   $$28 \\times 3 = 84$$\n\n2. Next, add $19$ to the result:\n   $$84 + 19 = 103$$\n\nANSWER: 103 | To compute $(15 \\times 8) - 27$, follow these steps:\n\n1. Multiply $15$ by $8$:\n   $$15 \\times 8 = 120$$\n\n2. Subtract $27$ from $120$:\n   $$120 - 27 = 93$$\n\nANSWER: 93 | To compute $(21 \\times 4) + 12$, follow these steps:\n\n1. Multiply $21$ by $4$:\n   $$21 \\times 4 = 84$$\n\n2. Add $12$ to the result:\n   $$84 + 12 = 96$$\n\nANSWER: 96",
+      "promptTokens": 80,
+      "completionTokens": 317,
+      "totalTokens": 397,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 727
+    },
+    {
+      "scenario": "parallel_2",
+      "strategy": "single_agent",
+      "output": "Step 1 (p_2_0): Compute (18 * 6) - 13\n18 * 6 = 108\n108 - 13 = 95\n\nStep 2 (p_2_1): Compute (24 * 5) + 11\n24 * 5 = 120\n120 + 11 = 131\n\nStep 3 (p_2_2): Compute (13 * 9) - 17\n13 * 9 = 117\n117 - 17 = 100\n\nStep 4 (p_2_3): Compute (27 * 2) + 29\n27 * 2 = 54\n54 + 29 = 83\n\nANSWER: 83",
+      "promptTokens": 113,
+      "completionTokens": 189,
+      "totalTokens": 302,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 728
+    },
+    {
+      "scenario": "parallel_2",
+      "strategy": "parallel_fanout",
+      "output": "To compute the expression (18 * 6) - 13, follow these steps:\n\n1. Multiply 18 by 6:\n   $18 \\times 6 = 108$\n\n2. Subtract 13 from the result:\n   $108 - 13 = 95$\n\nANSWER: 95 | To compute $(24 \\times 5) + 11$:\n\n1. First, calculate $24 \\times 5$:\n   $24 \\times 5 = 120$\n\n2. Next, add $11$ to the result:\n   $120 + 11 = 131$\n\nANSWER: 131 | To compute (13 * 9) - 17, follow these steps:\n\n1. Multiply 13 by 9:\n   $13 \\times 9 = 117$\n\n2. Subtract 17 from the result:\n   $117 - 17 = 100$\n\nANSWER: 100 | To compute (27 * 2) + 29:\n\n1. First, multiply 27 by 2:\n   $27 \\times 2 = 54$\n\n2. Then, add 29 to the result:\n   $54 + 29 = 83$\n\nANSWER: 83",
+      "promptTokens": 80,
+      "completionTokens": 311,
+      "totalTokens": 391,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 668
+    },
+    {
+      "scenario": "parallel_2",
+      "strategy": "staged_pipeline",
+      "output": "To compute $(18 \\times 6) - 13$:\n\n1. First, multiply $18$ by $6$:\n   $18 \\times 6 = 108$\n\n2. Next, subtract $13$ from $108$:\n   $108 - 13 = 95$\n\nANSWER: 95 | To compute $(24 \\times 5) + 11$:\n\n1. First, calculate $24 \\times 5$:\n   $24 \\times 5 = 120$\n\n2. Then, add 11 to the result:\n   $120 + 11 = 131$\n\nANSWER: 131 | To compute $(13 \\times 9) - 17$, follow these steps:\n\n1. Multiply $13$ by $9$:\n   $$13 \\times 9 = 117$$\n\n2. Subtract $17$ from $117$:\n   $$117 - 17 = 100$$\n\nANSWER: 100 | To compute $(27 \\times 2) + 29$:\n\n1. First, multiply 27 by 2:\n   $$27 \\times 2 = 54$$\n\n2. Next, add 29 to the result:\n   $$54 + 29 = 83$$\n\nANSWER: 83",
+      "promptTokens": 80,
+      "completionTokens": 319,
+      "totalTokens": 399,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 678
+    },
+    {
+      "scenario": "hybrid_0",
+      "strategy": "single_agent",
+      "output": "Step 1 (h_0_a): Compute a = (12 * 4) + 7\n$12 \\times 4 = 48$\n$48 + 7 = 55$\nSo, $a = 55$.\n\nStep 2 (h_0_b): Compute b = (15 * 3) - 8\n$15 \\times 3 = 45$\n$45 - 8 = 37$\nSo, $b = 37$.\n\nStep 3 (h_0_c): Compute c = (9 * 5) + 4\n$9 \\times 5 = 45$\n$45 + 4 = 49$\nSo, $c = 49$.\n\nStep 4 (h_0_s): Using upstream a, b, c compute (a + b) - c\n$a + b = 55 + 37 = 92$\n$(a + b) - c = 92 - 49 = 43$\n\nANSWER: 43",
+      "promptTokens": 118,
+      "completionTokens": 245,
+      "totalTokens": 363,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 814
+    },
+    {
+      "scenario": "hybrid_0",
+      "strategy": "parallel_fanout",
+      "output": "To compute $a = (12 \\times 4) + 7$:\n\n1. First, calculate the multiplication inside the parentheses:\n   $12 \\times 4 = 48$\n\n2. Then, add $7$ to the result:\n   $48 + 7 = 55$\n\nANSWER: 55 | To compute $b = (15 \\times 3) - 8$, follow these steps:\n\n1. Multiply $15$ by $3$: \n   $15 \\times 3 = 45$\n\n2. Subtract $8$ from the result: \n   $45 - 8 = 37$\n\nANSWER: 37 | To compute $c = (9 \\times 5) + 4$:\n\n1. First, perform the multiplication inside the parentheses: \n   $9 \\times 5 = 45$\n\n2. Then, add 4 to the result: \n   $45 + 4 = 49$\n\nANSWER: 49 | To compute $(a + b) - c$ using the upstream values of $a$, $b$, and $c$, please provide the specific values for $a$, $b$, and $c$.",
+      "promptTokens": 85,
+      "completionTokens": 269,
+      "totalTokens": 354,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 640
+    },
+    {
+      "scenario": "hybrid_0",
+      "strategy": "staged_pipeline",
+      "output": "To compute $(a + b) - c$ using the upstream results ($a = 55$, $b = 37$, and $c = 49$):\n\n1. First, compute $a + b$:\n   $$55 + 37 = 92$$\n\n2. Then, subtract $c$ from the result:\n   $$92 - 49 = 43$$\n\nANSWER: 43",
+      "promptTokens": 339,
+      "completionTokens": 321,
+      "totalTokens": 660,
+      "status": "completed",
+      "waves": 2,
+      "durationMs": 1291
+    },
+    {
+      "scenario": "hybrid_1",
+      "strategy": "single_agent",
+      "output": "Step 1 (h_1_a): Compute a = (18 * 5) - 12\n18 * 5 = 90\n90 - 12 = 78\nSo, a = 78.\n\nStep 2 (h_1_b): Compute b = (11 * 6) + 9\n11 * 6 = 66\n66 + 9 = 75\nSo, b = 75.\n\nStep 3 (h_1_c): Compute c = (14 * 4) - 5\n14 * 4 = 56\n56 - 5 = 51\nSo, c = 51.\n\nStep 4 (h_1_s): Using upstream a, b, c compute (a - b) * c\na - b = 78 - 75 = 3\n(a - b) * c = 3 * 51 = 153\n\nANSWER: 153",
+      "promptTokens": 120,
+      "completionTokens": 228,
+      "totalTokens": 348,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 934
+    },
+    {
+      "scenario": "hybrid_1",
+      "strategy": "parallel_fanout",
+      "output": "To compute the value of $a$:\n\n1. First, calculate the multiplication inside the parentheses:\n   $18 \\times 5 = 90$\n\n2. Then, subtract $12$ from the result:\n   $90 - 12 = 78$\n\nANSWER: 78 | To compute $b = (11 \\times 6) + 9$:\n\n1. First, multiply 11 by 6:\n   $11 \\times 6 = 66$\n\n2. Then, add 9 to the result:\n   $66 + 9 = 75$\n\nANSWER: 75 | To compute $c = (14 \\times 4) - 5$:\n\n1. First, calculate $14 \\times 4$:\n   $14 \\times 4 = 56$\n\n2. Next, subtract $5$ from the result:\n   $56 - 5 = 51$\n\nANSWER: 51 | To compute $(a - b) \\cdot c$ using the upstream variables $a$, $b$, and $c$, we simply substitute the given values into the expression. \n\nAssuming the upstream values are provided in the environment (though they are not explicitly listed in your prompt, usually this implies standard test variables or I should provide the algebraic/numeric result). Since no values for $a$, $b$, and $c$ were provided in the prompt, please provide the values to get a numeric answer. \n\nIf this is a template-based question where $a$, $b$, and $c$ are expected to be defined contextually, please supply them. \n\nANSWER: (a - b) * c",
+      "promptTokens": 87,
+      "completionTokens": 367,
+      "totalTokens": 454,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 932
+    },
+    {
+      "scenario": "hybrid_1",
+      "strategy": "staged_pipeline",
+      "output": "To compute $(a - b) \\times c$, we first substitute the values of $a$, $b$, and $c$ obtained from the upstream results:\n- $a = 78$\n- $b = 75$\n- $c = 51$\n\n1. Compute $a - b$:\n   $$78 - 75 = 3$$\n\n2. Multiply the result by $c$:\n   $$3 \\times 51 = 153$$\n\nANSWER: 153",
+      "promptTokens": 341,
+      "completionTokens": 340,
+      "totalTokens": 681,
+      "status": "completed",
+      "waves": 2,
+      "durationMs": 1396
+    },
+    {
+      "scenario": "hybrid_2",
+      "strategy": "single_agent",
+      "output": "Step 1 (h_2_a): Compute a = (13 * 7) - 11\n13 * 7 = 91\n91 - 11 = 80\nSo, a = 80.\n\nStep 2 (h_2_b): Compute b = (17 * 4) + 6\n17 * 4 = 68\n68 + 6 = 74\nSo, b = 74.\n\nStep 3 (h_2_c): Compute c = (19 * 3) - 9\n19 * 3 = 57\n57 - 9 = 48\nSo, c = 48.\n\nStep 4 (h_2_s): Using upstream a, b, c compute a + b + c\n80 + 74 + 48 = 154 + 48 = 202\nSo, a + b + c = 202.\n\nANSWER: 202",
+      "promptTokens": 118,
+      "completionTokens": 230,
+      "totalTokens": 348,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 842
+    },
+    {
+      "scenario": "hybrid_2",
+      "strategy": "parallel_fanout",
+      "output": "To compute the value of $a$:\n\n1. First, calculate the multiplication: $13 \\times 7 = 91$.\n2. Then, subtract 11: $91 - 11 = 80$.\n\nANSWER: 80 | To compute $b = (17 \\times 4) + 6$, follow these steps:\n\n1. Calculate $17 \\times 4$:\n   $17 \\times 4 = 68$\n\n2. Add $6$ to the result:\n   $68 + 6 = 74$\n\nANSWER: 74 | To compute $c = (19 \\times 3) - 9$, follow these steps:\n\n1. Multiply 19 by 3:\n   $19 \\times 3 = 57$\n\n2. Subtract 9 from 57:\n   $57 - 9 = 48$\n\nANSWER: 48 | To compute $a + b + c$, we first need to determine the values of the upstream variables $a$, $b$, and $c$. \n\nSince no upstream values were provided in the prompt, let's assume standard default test values or check if this is a templated question where $a$, $b$, and $c$ are defined elsewhere. However, looking at standard prompt completions for this format without context:\n\nIf the prompt implies $a, b, c$ are given in a hidden upstream context (like in some automated evaluation platforms), but none are present, typically they default to $0$ or are expected to be extracted. Assuming $a=0, b=0, c=0$ (or if this is a placeholder), the sum is $0$.\n\n*Wait*, let me re-read the prompt. \"Using upstream a, b, c compute a + b + c\". Since no values for $a$, $b$, and $c$ are given in the prompt, I will output the formal symbolic sum or assume the standard missing-variable evaluation. \n\nAssuming standard zero-initialization or missing input:\nANSWER: 0",
+      "promptTokens": 85,
+      "completionTokens": 451,
+      "totalTokens": 536,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 1389
+    },
+    {
+      "scenario": "hybrid_2",
+      "strategy": "staged_pipeline",
+      "output": "To compute $a + b + c$, we use the values obtained from the upstream results:\n- $a = 80$\n- $b = 74$\n- $c = 48$\n\nNow, add them together:\n$$a + b + c = 80 + 74 + 48$$\n\n1. Add $80$ and $74$:\n   $$80 + 74 = 154$$\n\n2. Add $48$ to the result:\n   $$154 + 48 = 202$$\n\nANSWER: 202",
+      "promptTokens": 343,
+      "completionTokens": 366,
+      "totalTokens": 709,
+      "status": "completed",
+      "waves": 2,
+      "durationMs": 1336
+    },
+    {
+      "scenario": "sequential_0",
+      "strategy": "single_agent",
+      "output": "To solve the problem, let's go through each step in order:\n\nStep 1 (s_0_0): Start with $x = 14$. Add 9.\n$14 + 9 = 23$\n\nStep 2 (s_0_1): Multiply the previous value by 3.\n$23 \\times 3 = 69$\n\nStep 3 (s_0_2): Subtract 17 from the previous value.\n$69 - 17 = 52$\n\nStep 4 (s_0_3): Multiply the previous value by 2.\n$52 \\times 2 = 104$\n\nANSWER: 104",
+      "promptTokens": 102,
+      "completionTokens": 156,
+      "totalTokens": 258,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 776
+    },
+    {
+      "scenario": "sequential_0",
+      "strategy": "parallel_fanout",
+      "output": "To find the answer, follow the steps:\n\n1. Start with $x = 14$.\n2. Add $9$: $14 + 9 = 23$.\n\nANSWER: 23 | Since there is no previous value provided in the prompt, I will assume a starting value of 0, or if this is the start of a sequence, please provide the initial value. \n\nAssuming the previous value is 0:\n0 * 3 = 0\n\nANSWER: 0 | To find the answer, I need the \"previous value\" from the context of our interaction. Since no previous value was provided in the prompt, please provide the number you would like me to subtract 17 from. | To provide the answer, I need to know the \"previous value\" you are referring to, as there is no prior context in this chat. \n\nPlease provide the starting value, and I will multiply it by 2.",
+      "promptTokens": 69,
+      "completionTokens": 195,
+      "totalTokens": 264,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 673
+    },
+    {
+      "scenario": "sequential_0",
+      "strategy": "staged_pipeline",
+      "output": "To find the answer, follow the steps:\n\n1. Take the previous value from the upstream results: $52$.\n2. Multiply by $2$: $52 \\times 2 = 104$.\n\nANSWER: 104",
+      "promptTokens": 254,
+      "completionTokens": 196,
+      "totalTokens": 450,
+      "status": "completed",
+      "waves": 4,
+      "durationMs": 2328
+    },
+    {
+      "scenario": "sequential_1",
+      "strategy": "single_agent",
+      "output": "To solve the problem, let's go through the steps in order:\n\nStep 1 (s_1_0): Start with $x = 25$. Subtract 7.\n$25 - 7 = 18$\n\nStep 2 (s_1_1): Multiply the previous value by 4.\n$18 \\times 4 = 72$\n\nStep 3 (s_1_2): Add 13 to the previous value.\n$72 + 13 = 85$\n\nStep 4 (s_1_3): Subtract 19 from the previous value.\n$85 - 19 = 66$\n\nANSWER: 66",
+      "promptTokens": 103,
+      "completionTokens": 155,
+      "totalTokens": 258,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 730
+    },
+    {
+      "scenario": "sequential_1",
+      "strategy": "parallel_fanout",
+      "output": "To find the final value:\n\nStart with $x = 25$.\nSubtract 7: $25 - 7 = 18$.\n\nANSWER: 18 | It looks like you didn't provide a previous value! Please provide the starting number, and I will multiply it by 4 for you. | To add 13 to the previous value, I need to know what the previous value is. Since no previous value was provided in the prompt, I will assume the starting value is 0.\n\n0 + 13 = 13\n\nANSWER: 13 | To subtract 19 from the previous value, please provide the previous value. \n\nANSWER: None",
+      "promptTokens": 70,
+      "completionTokens": 144,
+      "totalTokens": 214,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 676
+    },
+    {
+      "scenario": "sequential_1",
+      "strategy": "staged_pipeline",
+      "output": "To find the final answer, follow the steps:\n\n1. Take the previous value from the upstream results: $85$.\n2. Subtract 19: $85 - 19 = 66$.\n\nANSWER: 66",
+      "promptTokens": 261,
+      "completionTokens": 201,
+      "totalTokens": 462,
+      "status": "completed",
+      "waves": 4,
+      "durationMs": 2236
+    },
+    {
+      "scenario": "sequential_2",
+      "strategy": "single_agent",
+      "output": "Step 1 (s_2_0): Start with $x = 19$. Multiply by 2.\n$19 \\times 2 = 38$\n\nStep 2 (s_2_1): Add 15 to the previous value.\n$38 + 15 = 53$\n\nStep 3 (s_2_2): Multiply the previous value by 3.\n$53 \\times 3 = 159$\n\nStep 4 (s_2_3): Subtract 24 from the previous value.\n$159 - 24 = 135$\n\nANSWER: 135",
+      "promptTokens": 104,
+      "completionTokens": 145,
+      "totalTokens": 249,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 672
+    },
+    {
+      "scenario": "sequential_2",
+      "strategy": "parallel_fanout",
+      "output": "To find the final value:\n\n1. Start with $x = 19$.\n2. Multiply by 2: $19 \\times 2 = 38$.\n\nANSWER: 38 | To perform this operation, I need the \"previous value\" from our conversation history. Since this is the start of our interaction and there is no previous value provided, I cannot add 15 to it. \n\nPlease provide the starting value first! | To multiply the previous value by 3, I need to know what the previous value was. Since no previous value was provided in the prompt, please provide the number you would like to multiply. | It looks like you didn't provide a starting value! Please provide the initial number, and I will subtract 24 from it.",
+      "promptTokens": 71,
+      "completionTokens": 162,
+      "totalTokens": 233,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 616
+    },
+    {
+      "scenario": "sequential_2",
+      "strategy": "staged_pipeline",
+      "output": "To find the final value, follow these steps:\n\n1. Identify the previous value from the upstream result: $159$.\n2. Subtract 24 from the value: $159 - 24 = 135$.\n\nANSWER: 135",
+      "promptTokens": 266,
+      "completionTokens": 212,
+      "totalTokens": 478,
+      "status": "completed",
+      "waves": 4,
+      "durationMs": 2231
+    }
+  ]
+}

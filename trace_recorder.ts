@@ -1,4 +1,5 @@
-import { writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
+import path from "node:path";
 import { scheduleDag } from "./scheduler.ts";
 import { type ExecutionTopology, type TaskNode } from "./topology.ts";
 
@@ -84,10 +85,10 @@ export async function recordAllTraces(scenarios: WorkloadScenario[], generate: M
   return dataset;
 }
 
-const isMain = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, "/"));
+const isMain = process.argv[1] && path.resolve(process.argv[1]) === import.meta.filename;
 if (isMain) {
-  const { loadRecordedTraces } = await import("./replay.ts");
   const out = new URL("./traces/recorded_runs.json", import.meta.url);
-  const res = await recordAllTraces(loadRecordedTraces(out).scenarios, createGeminiGenerator(), out);
+  const existing = JSON.parse(readFileSync(out, "utf8")) as RecordedDataset;
+  const res = await recordAllTraces(existing.scenarios, createGeminiGenerator(), out);
   console.log(`Recorded ${res.runs.length} runs against ${res.model}`);
 }
