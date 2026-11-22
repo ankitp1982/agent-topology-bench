@@ -1,4 +1,4 @@
-`# agent-topology-bench
+# agent-topology-bench
 
 Tiny pre-execution DAG analyzer and trace replay benchmark for deciding when a workflow should run as a single agent, a parallel fan-out, or a staged pipeline.
 
