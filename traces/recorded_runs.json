@@ -1,614 +1,572 @@
 {
   "model": "gemini-3.5-flash-lite",
-  "recordedAt": "2026-11-22T17:58:16.297Z",
+  "recordedAt": "2026-11-22T18:07:01.914Z",
   "scenarios": [
     {
-      "name": "parallel_0",
+      "name": "code_audit_0",
       "family": "parallel_independent",
-      "expected": "75,99,84,69",
+      "expected": "SQL_INJECTION,MISSING_TIMEOUT,EXPOSED_SECRET",
       "nodes": [
         {
-          "id": "p_0_0",
+          "id": "mod_auth",
           "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (14 * 6) - 9"
+          "estimatedTokens": 150,
+          "prompt": "Classify the primary bug in this snippet as exactly one tag (SQL_INJECTION, MISSING_TIMEOUT, EXPOSED_SECRET, or SAFE): `db.query(\"SELECT * FROM users WHERE email = '\" + req.body.email + \"'\")`"
         },
         {
-          "id": "p_0_1",
+          "id": "mod_http",
           "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (23 * 4) + 7"
+          "estimatedTokens": 150,
+          "prompt": "Classify the primary bug in this snippet as exactly one tag (SQL_INJECTION, MISSING_TIMEOUT, EXPOSED_SECRET, or SAFE): `const res = await fetch(billingUrl, { method: 'POST', body });`"
         },
         {
-          "id": "p_0_2",
+          "id": "mod_cfg",
           "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (19 * 5) - 11"
-        },
-        {
-          "id": "p_0_3",
-          "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (17 * 3) + 18"
+          "estimatedTokens": 150,
+          "prompt": "Classify the primary bug in this snippet as exactly one tag (SQL_INJECTION, MISSING_TIMEOUT, EXPOSED_SECRET, or SAFE): `const API_TOKEN = \"sk-live-9948120abcdef\"; export { API_TOKEN };`"
         }
       ]
     },
     {
-      "name": "parallel_1",
+      "name": "code_audit_1",
       "family": "parallel_independent",
-      "expected": "98,103,93,96",
+      "expected": "PATH_TRAVERSAL,UNBOUNDED_RETRY,SAFE",
       "nodes": [
         {
-          "id": "p_1_0",
+          "id": "mod_upload",
           "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (16 * 7) - 14"
+          "estimatedTokens": 150,
+          "prompt": "Classify the primary bug in this snippet as exactly one tag (PATH_TRAVERSAL, UNBOUNDED_RETRY, SAFE): `fs.readFileSync('/uploads/' + req.query.filename)`"
         },
         {
-          "id": "p_1_1",
+          "id": "mod_worker",
           "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (28 * 3) + 19"
+          "estimatedTokens": 150,
+          "prompt": "Classify the primary bug in this snippet as exactly one tag (PATH_TRAVERSAL, UNBOUNDED_RETRY, SAFE): `while (true) { try { await sendJob(); break; } catch {} }`"
         },
         {
-          "id": "p_1_2",
+          "id": "mod_health",
           "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (15 * 8) - 27"
-        },
-        {
-          "id": "p_1_3",
-          "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (21 * 4) + 12"
+          "estimatedTokens": 150,
+          "prompt": "Classify the primary bug in this snippet as exactly one tag (PATH_TRAVERSAL, UNBOUNDED_RETRY, SAFE): `app.get('/healthz', (_req, res) => res.status(200).json({ ok: true }))`"
         }
       ]
     },
     {
-      "name": "parallel_2",
+      "name": "config_audit_2",
       "family": "parallel_independent",
-      "expected": "95,131,100,83",
+      "expected": "OPEN_CORS,SYNC_BLOCKING,HARDCODED_PATH",
       "nodes": [
         {
-          "id": "p_2_0",
+          "id": "cfg_cors",
           "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (18 * 6) - 13"
+          "estimatedTokens": 150,
+          "prompt": "Classify the primary issue as exactly one tag (OPEN_CORS, SYNC_BLOCKING, HARDCODED_PATH): `res.setHeader('Access-Control-Allow-Origin', '*'); res.setHeader('Access-Control-Allow-Credentials', 'true');`"
         },
         {
-          "id": "p_2_1",
+          "id": "cfg_hash",
           "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (24 * 5) + 11"
+          "estimatedTokens": 150,
+          "prompt": "Classify the primary issue as exactly one tag (OPEN_CORS, SYNC_BLOCKING, HARDCODED_PATH): `app.post('/login', (req) => crypto.pbkdf2Sync(req.pw, salt, 600000, 64, 'sha512'))`"
         },
         {
-          "id": "p_2_2",
+          "id": "cfg_path",
           "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (13 * 9) - 17"
-        },
-        {
-          "id": "p_2_3",
-          "dependsOn": [],
-          "estimatedTokens": 120,
-          "prompt": "Compute (27 * 2) + 29"
+          "estimatedTokens": 150,
+          "prompt": "Classify the primary issue as exactly one tag (OPEN_CORS, SYNC_BLOCKING, HARDCODED_PATH): `const DB_FILE = '/Users/dev1/local/prod_dump.sqlite';`"
         }
       ]
     },
     {
-      "name": "hybrid_0",
+      "name": "incident_triage_0",
       "family": "hybrid_pipeline",
-      "expected": "43",
+      "expected": "payments-api",
       "nodes": [
         {
-          "id": "h_0_a",
+          "id": "svc_auth",
           "dependsOn": [],
           "estimatedTokens": 140,
-          "prompt": "Compute a = (12 * 4) + 7"
+          "prompt": "Extract the service name and p99 latency in ms from log: `[auth-svc] p99=48ms error_rate=0.1%`"
         },
         {
-          "id": "h_0_b",
+          "id": "svc_pay",
           "dependsOn": [],
           "estimatedTokens": 140,
-          "prompt": "Compute b = (15 * 3) - 8"
+          "prompt": "Extract the service name and p99 latency in ms from log: `[payments-api] p99=1840ms error_rate=4.2%`"
         },
         {
-          "id": "h_0_c",
+          "id": "svc_cart",
           "dependsOn": [],
           "estimatedTokens": 140,
-          "prompt": "Compute c = (9 * 5) + 4"
+          "prompt": "Extract the service name and p99 latency in ms from log: `[cart-svc] p99=112ms error_rate=0.0%`"
         },
         {
-          "id": "h_0_s",
+          "id": "pick_bottleneck",
           "dependsOn": [
-            "h_0_a",
-            "h_0_b",
-            "h_0_c"
+            "svc_auth",
+            "svc_pay",
+            "svc_cart"
           ],
           "estimatedTokens": 180,
-          "prompt": "Using upstream a, b, c compute (a + b) - c"
+          "prompt": "From the upstream service logs, output ONLY the service name with the highest p99 latency."
         }
       ]
     },
     {
-      "name": "hybrid_1",
+      "name": "pr_blast_radius_1",
       "family": "hybrid_pipeline",
-      "expected": "153",
+      "expected": "schema-migration",
       "nodes": [
         {
-          "id": "h_1_a",
+          "id": "diff_css",
           "dependsOn": [],
           "estimatedTokens": 140,
-          "prompt": "Compute a = (18 * 5) - 12"
+          "prompt": "Summarize risk level (LOW, MEDIUM, CRITICAL) for change `css-tweaks`: updates button padding by 2px."
         },
         {
-          "id": "h_1_b",
+          "id": "diff_db",
           "dependsOn": [],
           "estimatedTokens": 140,
-          "prompt": "Compute b = (11 * 6) + 9"
+          "prompt": "Summarize risk level (LOW, MEDIUM, CRITICAL) for change `schema-migration`: ALTER TABLE orders ADD COLUMN region TEXT NOT NULL without default lock."
         },
         {
-          "id": "h_1_c",
+          "id": "diff_docs",
           "dependsOn": [],
           "estimatedTokens": 140,
-          "prompt": "Compute c = (14 * 4) - 5"
+          "prompt": "Summarize risk level (LOW, MEDIUM, CRITICAL) for change `docs-typo`: fixes spelling in CONTRIBUTING.md."
         },
         {
-          "id": "h_1_s",
+          "id": "pick_blocker",
           "dependsOn": [
-            "h_1_a",
-            "h_1_b",
-            "h_1_c"
+            "diff_css",
+            "diff_db",
+            "diff_docs"
           ],
           "estimatedTokens": 180,
-          "prompt": "Using upstream a, b, c compute (a - b) * c"
+          "prompt": "From the upstream diff summaries, output ONLY the change name rated CRITICAL (e.g. schema-migration)."
         }
       ]
     },
     {
-      "name": "hybrid_2",
+      "name": "service_review_2",
       "family": "hybrid_pipeline",
-      "expected": "202",
+      "expected": "redis-cache",
       "nodes": [
         {
-          "id": "h_2_a",
+          "id": "dep_pg",
           "dependsOn": [],
           "estimatedTokens": 140,
-          "prompt": "Compute a = (13 * 7) - 11"
+          "prompt": "Extract component and connection pool saturation % from: `postgres-primary pool_used=18/100 (18%)`"
         },
         {
-          "id": "h_2_b",
+          "id": "dep_redis",
           "dependsOn": [],
           "estimatedTokens": 140,
-          "prompt": "Compute b = (17 * 4) + 6"
+          "prompt": "Extract component and connection pool saturation % from: `redis-cache pool_used=99/100 (99%)`"
         },
         {
-          "id": "h_2_c",
+          "id": "dep_kafka",
           "dependsOn": [],
           "estimatedTokens": 140,
-          "prompt": "Compute c = (19 * 3) - 9"
+          "prompt": "Extract component and connection pool saturation % from: `kafka-broker pool_used=34/100 (34%)`"
         },
         {
-          "id": "h_2_s",
+          "id": "pick_saturated",
           "dependsOn": [
-            "h_2_a",
-            "h_2_b",
-            "h_2_c"
+            "dep_pg",
+            "dep_redis",
+            "dep_kafka"
           ],
           "estimatedTokens": 180,
-          "prompt": "Using upstream a, b, c compute a + b + c"
+          "prompt": "From the upstream metrics, output ONLY the component name with the highest pool saturation."
         }
       ]
     },
     {
-      "name": "sequential_0",
+      "name": "auth_trace_0",
       "family": "sequential_coupled",
-      "expected": "104",
+      "expected": "EXPIRED_SIGNING_KEY",
       "nodes": [
         {
-          "id": "s_0_0",
+          "id": "hop_1",
           "dependsOn": [],
-          "estimatedTokens": 110,
-          "prompt": "Start with x = 14. Add 9."
+          "estimatedTokens": 130,
+          "prompt": "Request header has `kid=key-2025-q4` and `tenant=acme`. State the key ID."
         },
         {
-          "id": "s_0_1",
+          "id": "hop_2",
           "dependsOn": [
-            "s_0_0"
+            "hop_1"
           ],
-          "estimatedTokens": 110,
-          "prompt": "Multiply the previous value by 3."
+          "estimatedTokens": 130,
+          "prompt": "Key registry: `key-2025-q4` expired on `2026-10-01`, while `key-2026-q4` is active. Using the key ID from upstream, state whether it is ACTIVE or EXPIRED."
         },
         {
-          "id": "s_0_2",
+          "id": "hop_3",
           "dependsOn": [
-            "s_0_1"
+            "hop_2"
           ],
-          "estimatedTokens": 110,
-          "prompt": "Subtract 17 from the previous value."
-        },
-        {
-          "id": "s_0_3",
-          "dependsOn": [
-            "s_0_2"
-          ],
-          "estimatedTokens": 110,
-          "prompt": "Multiply the previous value by 2."
+          "estimatedTokens": 130,
+          "prompt": "Policy: if upstream status is EXPIRED return code `EXPIRED_SIGNING_KEY`; if ACTIVE return `OK`. Output the exact code."
         }
       ]
     },
     {
-      "name": "sequential_1",
+      "name": "cache_trace_1",
       "family": "sequential_coupled",
-      "expected": "66",
+      "expected": "STALE_READ_REPLICA",
       "nodes": [
         {
-          "id": "s_1_0",
+          "id": "step_1",
           "dependsOn": [],
-          "estimatedTokens": 110,
-          "prompt": "Start with x = 25. Subtract 7."
+          "estimatedTokens": 130,
+          "prompt": "Order `ord-88` was written to `primary-db` at `10:00:05.100Z`. Subsequent read hit `replica-2` at `10:00:05.140Z` with replication lag `250ms`. Output whether read lag > elapsed time (`LAG_EXCEEDED` or `CONSISTENT`)."
         },
         {
-          "id": "s_1_1",
+          "id": "step_2",
           "dependsOn": [
-            "s_1_0"
+            "step_1"
           ],
-          "estimatedTokens": 110,
-          "prompt": "Multiply the previous value by 4."
+          "estimatedTokens": 130,
+          "prompt": "Triage rule: if upstream is `LAG_EXCEEDED`, root cause is `STALE_READ_REPLICA`; otherwise `CACHE_POISONING`. Output the root cause tag."
         },
         {
-          "id": "s_1_2",
+          "id": "step_3",
           "dependsOn": [
-            "s_1_1"
+            "step_2"
           ],
-          "estimatedTokens": 110,
-          "prompt": "Add 13 to the previous value."
-        },
-        {
-          "id": "s_1_3",
-          "dependsOn": [
-            "s_1_2"
-          ],
-          "estimatedTokens": 110,
-          "prompt": "Subtract 19 from the previous value."
+          "estimatedTokens": 130,
+          "prompt": "Confirm and output the final root cause tag from upstream unchanged."
         }
       ]
     },
     {
-      "name": "sequential_2",
+      "name": "deploy_trace_2",
       "family": "sequential_coupled",
-      "expected": "135",
+      "expected": "ROLLBACK_CANARY",
       "nodes": [
         {
-          "id": "s_2_0",
+          "id": "d_1",
           "dependsOn": [],
-          "estimatedTokens": 110,
-          "prompt": "Start with x = 19. Multiply by 2."
+          "estimatedTokens": 130,
+          "prompt": "Canary `v2.14.0` shows 5xx rate `3.8%` vs baseline `0.2%` (threshold `1.0%`). State `BREACHED` or `HEALTHY`."
         },
         {
-          "id": "s_2_1",
+          "id": "d_2",
           "dependsOn": [
-            "s_2_0"
+            "d_1"
           ],
-          "estimatedTokens": 110,
-          "prompt": "Add 15 to the previous value."
+          "estimatedTokens": 130,
+          "prompt": "Release controller: if upstream is `BREACHED`, action is `ROLLBACK_CANARY`; otherwise `PROMOTE_100`. Output the action."
         },
         {
-          "id": "s_2_2",
+          "id": "d_3",
           "dependsOn": [
-            "s_2_1"
+            "d_2"
           ],
-          "estimatedTokens": 110,
-          "prompt": "Multiply the previous value by 3."
-        },
-        {
-          "id": "s_2_3",
-          "dependsOn": [
-            "s_2_2"
-          ],
-          "estimatedTokens": 110,
-          "prompt": "Subtract 24 from the previous value."
+          "estimatedTokens": 130,
+          "prompt": "Emit the final release controller action from upstream unchanged."
         }
       ]
     }
   ],
   "runs": [
     {
-      "scenario": "parallel_0",
+      "scenario": "code_audit_0",
       "strategy": "single_agent",
-      "output": "To solve the problem, let's complete each step in order:\n\nStep 1 (p_0_0): Compute (14 * 6) - 9\n14 * 6 = 84\n84 - 9 = 75\n\nStep 2 (p_0_1): Compute (23 * 4) + 7\n23 * 4 = 92\n92 + 7 = 99\n\nStep 3 (p_0_2): Compute (19 * 5) - 11\n19 * 5 = 95\n95 - 11 = 84\n\nStep 4 (p_0_3): Compute (17 * 3) + 18\n17 * 3 = 51\n51 + 18 = 69\n\nANSWER: 69",
-      "promptTokens": 111,
-      "completionTokens": 192,
-      "totalTokens": 303,
+      "output": "To solve the problem, let's go through each step in order:\n\nStep 1 (mod_auth): The snippet `db.query(\"SELECT * FROM users WHERE email = '\" + req.body.email + \"'\")` directly concatenates user input (`req.body.email`) into a database query string, which is a classic vulnerability known as **SQL_INJECTION**.\n\nStep 2 (mod_http): The snippet `const res = await fetch(billingUrl, { method: 'POST', body });` makes an HTTP fetch request, but it lacks a timeout mechanism (which can lead to hanging requests or denial of service if the server does not respond). Therefore, the primary bug classification is **MISSING_TIMEOUT**.\n\nStep 3 (mod_cfg): The snippet `const API_TOKEN = \"sk-live-9948120abcdef\"; export { API_TOKEN };` exposes a hardcoded live API secret directly in the source code, which is classified as **EXPOSED_SECRET**.\n\nWait, let's re-verify Step 2 standard static analysis tags. Often `fetch` without an AbortController/timeout is tagged as `MISSING_TIMEOUT` in",
+      "promptTokens": 210,
+      "completionTokens": 252,
+      "totalTokens": 462,
       "status": "completed",
       "waves": 1,
-      "durationMs": 901
+      "durationMs": 1569
     },
     {
-      "scenario": "parallel_0",
+      "scenario": "code_audit_0",
       "strategy": "parallel_fanout",
-      "output": "To compute $(14 \\times 6) - 9$:\n\n1. First, calculate $14 \\times 6$:\n   $14 \\times 6 = 84$\n\n2. Next, subtract $9$ from $84$:\n   $84 - 9 = 75$\n\nANSWER: 75 | To compute $(23 \\times 4) + 7$, follow these steps:\n\n1. Multiply 23 by 4:\n   $23 \\times 4 = 92$\n\n2. Add 7 to the result:\n   $92 + 7 = 99$\n\nANSWER: 99 | To compute (19 * 5) - 11, we follow these steps:\n\n1. Multiply 19 by 5:\n   $$19 \\times 5 = 95$$\n\n2. Subtract 11 from the result:\n   $$95 - 11 = 84$$\n\nANSWER: 84 | To compute the value of $(17 \\times 3) + 18$, we follow these steps:\n\n1. Multiply $17$ by $3$:\n   $$17 \\times 3 = 51$$\n\n2. Add $18$ to the result:\n   $$51 + 18 = 69$$\n\nANSWER: 69",
-      "promptTokens": 78,
-      "completionTokens": 303,
-      "totalTokens": 381,
+      "output": "To classify the primary bug in the provided snippet:\n\nThe code directly concatenates user input (`req.body.email`) into a raw SQL query string (`\"SELECT * FROM users WHERE email = '\" + req.body.email + \"'\"`). This allows an attacker to manipulate the query structure, which is a classic vulnerability known as SQL Injection.\n\nANSWER: SQL_INJECTION | To determine the primary bug in the provided snippet, let's analyze the code:\n\n```javascript\nconst res = await fetch(billingUrl, { method: 'POST', body });\n```\n\n- **SQL_INJECTION**: Not applicable, as this is JavaScript using `fetch` for an HTTP request, not interacting with a SQL database.\n- **EXPOSED_SECRET**: Not applicable, as there are no hardcoded credentials, API keys, or secrets visible in the snippet.\n- **MISSING_TIMEOUT**: The `fetch` API in JavaScript does not time out by default. Making network requests without a timeout mechanism (such as using `AbortController`) can lead to hanging requests, resource exhaustion, and denial-of-service in production environments. Therefore, it is susceptible to a missing timeout vulnerability.\n- **SAFE**: Not applicable, due to the lack of a request timeout.\n\nANSWER: MISSING_TIMEOUT | To classify the primary bug in the provided snippet:\n\nThe code explicitly defines a hardcoded API token (`sk-live-9948120abcdef`) and exports it, making it visible in the source code. This represents a sensitive credential exposed in the codebase.\n\nANSWER: EXPOSED_SECRET",
+      "promptTokens": 186,
+      "completionTokens": 332,
+      "totalTokens": 518,
       "status": "completed",
       "waves": 1,
-      "durationMs": 656
+      "durationMs": 1015
     },
     {
-      "scenario": "parallel_0",
+      "scenario": "code_audit_0",
       "strategy": "staged_pipeline",
-      "output": "To compute the expression $(14 \\times 6) - 9$:\n\n1. First, multiply $14$ by $6$:\n   $$14 \\times 6 = 84$$\n\n2. Then, subtract $9$ from the result:\n   $$84 - 9 = 75$$\n\nANSWER: 75 | To compute $(23 \\times 4) + 7$, follow these steps:\n\n1. Multiply 23 by 4:\n   $23 \\times 4 = 92$\n\n2. Add 7 to the result:\n   $92 + 7 = 99$\n\nANSWER: 99 | To compute $(19 \\times 5) - 11$, follow these steps:\n\n1. Multiply $19$ by $5$:\n   $$19 \\times 5 = 95$$\n\n2. Subtract $11$ from $95$:\n   $$95 - 11 = 84$$\n\nANSWER: 84 | To compute the expression $(17 \\times 3) + 18$, follow these steps:\n\n1. Multiply $17$ by $3$:\n   $$17 \\times 3 = 51$$\n\n2. Add $18$ to the result:\n   $$51 + 18 = 69$$\n\nANSWER: 69",
-      "promptTokens": 78,
-      "completionTokens": 305,
-      "totalTokens": 383,
+      "output": "To classify the primary bug in the provided snippet:\n\nThe code directly concatenates user input (`req.body.email`) into a raw SQL query string (`\"SELECT * FROM users WHERE email = '\" + req.body.email + \"'\"`). This allows an attacker to manipulate the query structure, which is the classic vulnerability pattern for SQL injection.\n\nANSWER: SQL_INJECTION | To determine the primary bug in the snippet:\n\n- `fetch` is being used to make an HTTP request to `billingUrl`.\n- There is no SQL database interaction present, so it is not **SQL_INJECTION**.\n- There are no hardcoded API keys, passwords, or tokens visible, so it is not **EXPOSED_SECRET**.\n- The `fetch` call does not include an `AbortController` or a `timeout` option, meaning a hanging network request could block execution indefinitely. In many security and robustness contexts (such as static analysis rules regarding Denial of Service), failing to set a timeout on network requests is classified as **MISSING_TIMEOUT**.\n\nANSWER: MISSING_TIMEOUT | To determine the primary bug in the provided snippet, let's analyze the code:\n\n```javascript\nconst API_TOKEN = \"sk-live-9948120abcdef\"; export { API_TOKEN };\n```\n\n- **SQL_INJECTION**: Involves improperly sanitized user input being concatenated into a database query. (Not present here)\n- **MISSING_TIMEOUT**: Involves network requests or operations without a timeout mechanism. (Not present here)\n- **EXPOSED_SECRET**: Involves hardcoding sensitive information (such as API keys, passwords, or tokens) directly into the source code and exporting or exposing it. (Present here, as `API_TOKEN` is hardcoded and exported).\n- **SAFE**: The code is secure. (Not applicable)\n\nANSWER: EXPOSED_SECRET",
+      "promptTokens": 186,
+      "completionTokens": 398,
+      "totalTokens": 584,
       "status": "completed",
       "waves": 1,
-      "durationMs": 674
+      "durationMs": 964
     },
     {
-      "scenario": "parallel_1",
+      "scenario": "code_audit_1",
       "strategy": "single_agent",
-      "output": "Step 1 (p_1_0): Compute (16 * 7) - 14\n16 * 7 = 112\n112 - 14 = 98\n\nStep 2 (p_1_1): Compute (28 * 3) + 19\n28 * 3 = 84\n84 + 19 = 103\n\nStep 3 (p_1_2): Compute (15 * 8) - 27\n15 * 8 = 120\n120 - 27 = 93\n\nStep 4 (p_1_3): Compute (21 * 4) + 12\n21 * 4 = 84\n84 + 12 = 96\n\nANSWER: 96",
-      "promptTokens": 113,
-      "completionTokens": 186,
-      "totalTokens": 299,
+      "output": "To solve this, let's go through each step in order:\n\nStep 1 (mod_upload): The snippet is `fs.readFileSync('/uploads/' + req.query.filename)`. Since user input (`req.query.filename`) is directly concatenated into a file path without sanitization, it allows directory traversal attacks (e.g., passing `../../etc/passwd`). Thus, the classification is `PATH_TRAVERSAL`.\n\nStep 2 (mod_worker): The snippet is `while (true) { try { await sendJob(); break; } catch {} }`. Although it contains a `while (true)` loop, it has a `break` statement inside the `try` block that executes upon success. Therefore, it will not loop infinitely without bound. This pattern is safe. However, looking at the tags provided `(PATH_TRAVERSAL, UNBOUNDED_RETRY, SAFE)`, this code correctly handles retries or is a standard pattern, but wait—let's re-read the loop. If `sendJob()` keeps throwing, it retries forever. But typically, `UNBOUNDED_RETRY` refers to a loop without backoff or exit condition. Wait, let",
+      "promptTokens": 194,
+      "completionTokens": 252,
+      "totalTokens": 446,
       "status": "completed",
       "waves": 1,
-      "durationMs": 629
+      "durationMs": 1289
     },
     {
-      "scenario": "parallel_1",
+      "scenario": "code_audit_1",
       "strategy": "parallel_fanout",
-      "output": "To compute the value, follow these steps:\n\n1. Multiply 16 by 7:\n   $16 \\times 7 = 112$\n\n2. Subtract 14 from the result:\n   $112 - 14 = 98$\n\nANSWER: 98 | To compute $(28 \\times 3) + 19$:\n\n1. First, calculate $28 \\times 3$:\n   $28 \\times 3 = 84$\n\n2. Next, add 19 to the result:\n   $84 + 19 = 103$\n\nANSWER: 103 | To compute $(15 \\times 8) - 27$, follow these steps:\n\n1. Multiply 15 by 8:\n   $$15 \\times 8 = 120$$\n\n2. Subtract 27 from the result:\n   $$120 - 27 = 93$$\n\nANSWER: 93 | To compute (21 * 4) + 12:\n\n1. First, multiply 21 by 4:\n   21 * 4 = 84\n\n2. Next, add 12 to the result:\n   84 + 12 = 96\n\nANSWER: 96",
-      "promptTokens": 80,
-      "completionTokens": 291,
-      "totalTokens": 371,
+      "output": "To classify the vulnerability in the given snippet:\n\nThe code uses user input directly from `req.query.filename` to construct a file path passed to `fs.readFileSync`:\n`fs.readFileSync('/uploads/' + req.query.filename)`\n\nSince there is no sanitization or restriction on the `filename` parameter (such as preventing directory traversal sequences like `../`), an attacker could supply malicious input to read arbitrary files on the system outside of the intended `/uploads/` directory.\n\nANSWER: PATH_TRAVERSAL | To classify the primary bug in the provided snippet:\n\nThe code contains an infinite `while (true)` loop with a `try-catch` block that catches all exceptions without any backoff, delay, rate limiting, or termination condition other than a successful `sendJob()`. If `sendJob()` continuously fails (e.g., due to a network outage, authentication failure, or persistent server error), the loop will immediately and repeatedly retry the operation at maximum CPU speed, which is a classic anti-pattern known as a tight retry loop or unbounded retry.\n\nANSWER: UNBOUNDED_RETRY | To classify the primary bug in the provided snippet:\n\nThe code defines a simple Express.js health check endpoint (`/healthz`) that returns a static JSON response (`{ ok: true }`). It does not perform any file system operations, dynamic path resolutions, or unbounded loops/retries. \n\nANSWER: SAFE",
+      "promptTokens": 170,
+      "completionTokens": 295,
+      "totalTokens": 465,
       "status": "completed",
       "waves": 1,
-      "durationMs": 617
+      "durationMs": 1022
     },
     {
-      "scenario": "parallel_1",
+      "scenario": "code_audit_1",
       "strategy": "staged_pipeline",
-      "output": "To compute $(16 \\times 7) - 14$:\n\n1. First, calculate $16 \\times 7$:\n   $16 \\times 7 = 112$\n\n2. Next, subtract 14 from 112:\n   $112 - 14 = 98$\n\nANSWER: 98 | To compute $(28 \\times 3) + 19$:\n\n1. First, multiply $28$ by $3$:\n   $$28 \\times 3 = 84$$\n\n2. Next, add $19$ to the result:\n   $$84 + 19 = 103$$\n\nANSWER: 103 | To compute $(15 \\times 8) - 27$, follow these steps:\n\n1. Multiply $15$ by $8$:\n   $$15 \\times 8 = 120$$\n\n2. Subtract $27$ from $120$:\n   $$120 - 27 = 93$$\n\nANSWER: 93 | To compute $(21 \\times 4) + 12$, follow these steps:\n\n1. Multiply $21$ by $4$:\n   $$21 \\times 4 = 84$$\n\n2. Add $12$ to the result:\n   $$84 + 12 = 96$$\n\nANSWER: 96",
-      "promptTokens": 80,
-      "completionTokens": 317,
-      "totalTokens": 397,
+      "output": "To classify the primary bug in the provided snippet:\n\nThe code uses user-controlled input (`req.query.filename`) directly in a file system path without sufficient sanitization or validation (such as `path.basename` or `path.resolve`), allowing an attacker to use sequences like `../` to access files outside the intended `/uploads/` directory.\n\nANSWER: PATH_TRAVERSAL | To determine the primary bug in the provided snippet:\n\n```javascript\nwhile (true) { \n  try { \n    await sendJob(); \n    break; \n  } catch {} \n}\n```\n\n- The code enters an infinite loop (`while (true)`).\n- It attempts to execute an asynchronous job (`await sendJob()`).\n- If an exception occurs, the `catch {}` block silently swallows the error without any backoff, delay, or exit condition.\n- This creates an **unbounded retry** loop that will continuously hammer the system or CPU if `sendJob()` consistently fails.\n\nANSWER: UNBOUNDED_RETRY | To classify the primary bug in the provided snippet:\n\nThe code defines a simple Express route handler for `/healthz` that responds with a status of 200 and a JSON object `{ ok: true }`. There are no dynamic file paths, potential infinite/unbounded loops, or security vulnerabilities present in this code.\n\nANSWER: SAFE",
+      "promptTokens": 170,
+      "completionTokens": 292,
+      "totalTokens": 462,
       "status": "completed",
       "waves": 1,
-      "durationMs": 727
+      "durationMs": 898
     },
     {
-      "scenario": "parallel_2",
+      "scenario": "config_audit_2",
       "strategy": "single_agent",
-      "output": "Step 1 (p_2_0): Compute (18 * 6) - 13\n18 * 6 = 108\n108 - 13 = 95\n\nStep 2 (p_2_1): Compute (24 * 5) + 11\n24 * 5 = 120\n120 + 11 = 131\n\nStep 3 (p_2_2): Compute (13 * 9) - 17\n13 * 9 = 117\n117 - 17 = 100\n\nStep 4 (p_2_3): Compute (27 * 2) + 29\n27 * 2 = 54\n54 + 29 = 83\n\nANSWER: 83",
-      "promptTokens": 113,
-      "completionTokens": 189,
-      "totalTokens": 302,
-      "status": "completed",
-      "waves": 1,
-      "durationMs": 728
-    },
-    {
-      "scenario": "parallel_2",
-      "strategy": "parallel_fanout",
-      "output": "To compute the expression (18 * 6) - 13, follow these steps:\n\n1. Multiply 18 by 6:\n   $18 \\times 6 = 108$\n\n2. Subtract 13 from the result:\n   $108 - 13 = 95$\n\nANSWER: 95 | To compute $(24 \\times 5) + 11$:\n\n1. First, calculate $24 \\times 5$:\n   $24 \\times 5 = 120$\n\n2. Next, add $11$ to the result:\n   $120 + 11 = 131$\n\nANSWER: 131 | To compute (13 * 9) - 17, follow these steps:\n\n1. Multiply 13 by 9:\n   $13 \\times 9 = 117$\n\n2. Subtract 17 from the result:\n   $117 - 17 = 100$\n\nANSWER: 100 | To compute (27 * 2) + 29:\n\n1. First, multiply 27 by 2:\n   $27 \\times 2 = 54$\n\n2. Then, add 29 to the result:\n   $54 + 29 = 83$\n\nANSWER: 83",
-      "promptTokens": 80,
-      "completionTokens": 311,
-      "totalTokens": 391,
-      "status": "completed",
-      "waves": 1,
-      "durationMs": 668
-    },
-    {
-      "scenario": "parallel_2",
-      "strategy": "staged_pipeline",
-      "output": "To compute $(18 \\times 6) - 13$:\n\n1. First, multiply $18$ by $6$:\n   $18 \\times 6 = 108$\n\n2. Next, subtract $13$ from $108$:\n   $108 - 13 = 95$\n\nANSWER: 95 | To compute $(24 \\times 5) + 11$:\n\n1. First, calculate $24 \\times 5$:\n   $24 \\times 5 = 120$\n\n2. Then, add 11 to the result:\n   $120 + 11 = 131$\n\nANSWER: 131 | To compute $(13 \\times 9) - 17$, follow these steps:\n\n1. Multiply $13$ by $9$:\n   $$13 \\times 9 = 117$$\n\n2. Subtract $17$ from $117$:\n   $$117 - 17 = 100$$\n\nANSWER: 100 | To compute $(27 \\times 2) + 29$:\n\n1. First, multiply 27 by 2:\n   $$27 \\times 2 = 54$$\n\n2. Next, add 29 to the result:\n   $$54 + 29 = 83$$\n\nANSWER: 83",
-      "promptTokens": 80,
-      "completionTokens": 319,
-      "totalTokens": 399,
-      "status": "completed",
-      "waves": 1,
-      "durationMs": 678
-    },
-    {
-      "scenario": "hybrid_0",
-      "strategy": "single_agent",
-      "output": "Step 1 (h_0_a): Compute a = (12 * 4) + 7\n$12 \\times 4 = 48$\n$48 + 7 = 55$\nSo, $a = 55$.\n\nStep 2 (h_0_b): Compute b = (15 * 3) - 8\n$15 \\times 3 = 45$\n$45 - 8 = 37$\nSo, $b = 37$.\n\nStep 3 (h_0_c): Compute c = (9 * 5) + 4\n$9 \\times 5 = 45$\n$45 + 4 = 49$\nSo, $c = 49$.\n\nStep 4 (h_0_s): Using upstream a, b, c compute (a + b) - c\n$a + b = 55 + 37 = 92$\n$(a + b) - c = 92 - 49 = 43$\n\nANSWER: 43",
-      "promptTokens": 118,
-      "completionTokens": 245,
-      "totalTokens": 363,
-      "status": "completed",
-      "waves": 1,
-      "durationMs": 814
-    },
-    {
-      "scenario": "hybrid_0",
-      "strategy": "parallel_fanout",
-      "output": "To compute $a = (12 \\times 4) + 7$:\n\n1. First, calculate the multiplication inside the parentheses:\n   $12 \\times 4 = 48$\n\n2. Then, add $7$ to the result:\n   $48 + 7 = 55$\n\nANSWER: 55 | To compute $b = (15 \\times 3) - 8$, follow these steps:\n\n1. Multiply $15$ by $3$: \n   $15 \\times 3 = 45$\n\n2. Subtract $8$ from the result: \n   $45 - 8 = 37$\n\nANSWER: 37 | To compute $c = (9 \\times 5) + 4$:\n\n1. First, perform the multiplication inside the parentheses: \n   $9 \\times 5 = 45$\n\n2. Then, add 4 to the result: \n   $45 + 4 = 49$\n\nANSWER: 49 | To compute $(a + b) - c$ using the upstream values of $a$, $b$, and $c$, please provide the specific values for $a$, $b$, and $c$.",
-      "promptTokens": 85,
-      "completionTokens": 269,
-      "totalTokens": 354,
+      "output": "Step 1 (cfg_cors): The code sets `Access-Control-Allow-Origin` to `*` along with `Access-Control-Allow-Credentials: true`, which is a classic security misconfiguration known as OPEN_CORS.\nStep 2 (cfg_hash): The code uses `crypto.pbkdf2Sync`, which is a synchronous cryptographic operation that blocks the event loop, classified as SYNC_BLOCKING.\nStep 3 (cfg_path): The code uses an absolute hardcoded file system path (`/Users/dev1/local/prod_dump.sqlite`), classified as HARDCODED_PATH.\n\nANSWER: OPEN_CORS, SYNC_BLOCKING, HARDCODED_PATH",
+      "promptTokens": 225,
+      "completionTokens": 153,
+      "totalTokens": 378,
       "status": "completed",
       "waves": 1,
       "durationMs": 640
     },
     {
-      "scenario": "hybrid_0",
+      "scenario": "config_audit_2",
+      "strategy": "parallel_fanout",
+      "output": "To determine the primary issue in the given code fragment:\n\n`res.setHeader('Access-Control-Allow-Origin', '*'); res.setHeader('Access-Control-Allow-Credentials', 'true');`\n\nThis code configures Cross-Origin Resource Sharing (CORS) headers in a web server response. Specifically, setting `Access-Control-Allow-Origin` to `*` (wildcard) while simultaneously setting `Access-Control-Allow-Credentials` to `true` is a security misconfiguration (often disallowed by modern browsers and security specifications because it exposes sensitive credentials to any origin). \n\nTherefore, the primary issue falls under CORS.\n\nANSWER: OPEN_CORS | To determine the primary issue in the provided code snippet:\n\n`app.post('/login', (req) => crypto.pbkdf2Sync(req.pw, salt, 600000, 64, 'sha512'))`\n\nThe code uses `crypto.pbkdf2Sync`, which is a synchronous cryptographic function. In an asynchronous event-driven environment like Node.js (implied by `app.post`), calling synchronous blocking functions within a request handler blocks the main event loop, preventing the server from handling any other incoming requests until the operation completes.\n\nANSWER: SYNC_BLOCKING | To determine the primary issue in the provided code snippet:\n\n`const DB_FILE = '/Users/dev1/local/prod_dump.sqlite';`\n\n- **OPEN_CORS**: Relates to Cross-Origin Resource Sharing configurations, which is not present here.\n- **SYNC_BLOCKING**: Relates to synchronous operations that block the event loop, which is not indicated by a simple variable declaration.\n- **HARDCODED_PATH**: The code contains an absolute, machine-specific file path (`/Users/dev1/...`), which will break when run on other machines, in containerized environments, or in production servers. This is a classic example of a hardcoded path.\n\nANSWER: HARDCODED_PATH",
+      "promptTokens": 201,
+      "completionTokens": 425,
+      "totalTokens": 626,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 844
+    },
+    {
+      "scenario": "config_audit_2",
       "strategy": "staged_pipeline",
-      "output": "To compute $(a + b) - c$ using the upstream results ($a = 55$, $b = 37$, and $c = 49$):\n\n1. First, compute $a + b$:\n   $$55 + 37 = 92$$\n\n2. Then, subtract $c$ from the result:\n   $$92 - 49 = 43$$\n\nANSWER: 43",
-      "promptTokens": 339,
-      "completionTokens": 321,
-      "totalTokens": 660,
+      "output": "To classify the primary issue in the provided code snippet:\n\n`res.setHeader('Access-Control-Allow-Origin', '*'); res.setHeader('Access-Control-Allow-Credentials', 'true');`\n\nThis configuration attempts to use a wildcard (`*`) for the `Access-Control-Allow-Origin` header while simultaneously setting `Access-Control-Allow-Credentials` to `true`. According to the CORS specification, browsers will block requests that combine credentials with a wildcard origin, but more importantly, allowing arbitrary origins (`*`) with credentials is a major security vulnerability that leaves the application open to Cross-Origin Resource Sharing exploits.\n\nANSWER: OPEN_CORS | To classify the primary issue in the provided code snippet:\n\nThe code uses `crypto.pbkdf2Sync`, which is a synchronous, CPU-intensive cryptographic operation executed directly inside an Express.js route handler. In Node.js, synchronous blocking operations on the event loop prevent the server from handling any other incoming requests until the operation completes, leading to severe performance bottlenecks and denial of service (DoS) vulnerabilities.\n\nANSWER: SYNC_BLOCKING | To determine the primary issue in the provided code snippet:\n\n`const DB_FILE = '/Users/dev1/local/prod_dump.sqlite';`\n\n- **OPEN_CORS** relates to Cross-Origin Resource Sharing misconfigurations, which is not present here.\n- **SYNC_BLOCKING** relates to synchronous operations blocking the event loop, which is not inherently shown by a constant declaration.\n- **HARDCODED_PATH** relates to using an absolute, machine-specific file path (e.g., `/Users/dev1/...`) directly in the source code instead of using environment variables or relative paths. This makes the code brittle and insecure across different environments.\n\nANSWER: HARDCODED_PATH",
+      "promptTokens": 201,
+      "completionTokens": 378,
+      "totalTokens": 579,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 877
+    },
+    {
+      "scenario": "incident_triage_0",
+      "strategy": "single_agent",
+      "output": "Step 1 (svc_auth): Service name: auth-svc, p99 latency: 48ms\nStep 2 (svc_pay): Service name: payments-api, p99 latency: 1840ms\nStep 3 (svc_cart): Service name: cart-svc, p99 latency: 112ms\nStep 4 (pick_bottleneck): payments-api\n\nANSWER: payments-api",
+      "promptTokens": 188,
+      "completionTokens": 96,
+      "totalTokens": 284,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 618
+    },
+    {
+      "scenario": "incident_triage_0",
+      "strategy": "parallel_fanout",
+      "output": "To extract the service name and p99 latency from the log:\n\n* **Service Name:** auth-svc\n* **P99 Latency:** 48 ms\n\nANSWER: auth-svc, 48ms | To extract the service name and p99 latency from the log:\n\n* **Service name:** `payments-api`\n* **P99 latency:** `1840` ms\n\nANSWER: payments-api, 1840ms | To extract the service name and p99 latency from the log:\n- Service name: `cart-svc`\n- P99 latency: `112`\n\nANSWER: cart-svc, 112ms | To determine which service has the highest p99 latency, we need the upstream service logs. However, you did not provide any logs in your prompt. \n\nPlease provide the logs so I can analyze them and give you the correct service name.\n\nANSWER: None (No logs provided)",
+      "promptTokens": 162,
+      "completionTokens": 207,
+      "totalTokens": 369,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 781
+    },
+    {
+      "scenario": "incident_triage_0",
+      "strategy": "staged_pipeline",
+      "output": "To find the service with the highest p99 latency, let's compare the extracted values:\n- `auth-svc`: 48ms\n- `payments-api`: 1840ms\n- `cart-svc`: 112ms\n\nComparing the numeric values (48, 1840, 112), `1840ms` is the highest, which belongs to `payments-api`.\n\nANSWER: payments-api",
+      "promptTokens": 425,
+      "completionTokens": 342,
+      "totalTokens": 767,
       "status": "completed",
       "waves": 2,
-      "durationMs": 1291
+      "durationMs": 1485
     },
     {
-      "scenario": "hybrid_1",
+      "scenario": "pr_blast_radius_1",
       "strategy": "single_agent",
-      "output": "Step 1 (h_1_a): Compute a = (18 * 5) - 12\n18 * 5 = 90\n90 - 12 = 78\nSo, a = 78.\n\nStep 2 (h_1_b): Compute b = (11 * 6) + 9\n11 * 6 = 66\n66 + 9 = 75\nSo, b = 75.\n\nStep 3 (h_1_c): Compute c = (14 * 4) - 5\n14 * 4 = 56\n56 - 5 = 51\nSo, c = 51.\n\nStep 4 (h_1_s): Using upstream a, b, c compute (a - b) * c\na - b = 78 - 75 = 3\n(a - b) * c = 3 * 51 = 153\n\nANSWER: 153",
-      "promptTokens": 120,
-      "completionTokens": 228,
-      "totalTokens": 348,
+      "output": "Step 1: The change `css-tweaks` only updates button padding by 2px, which is purely cosmetic and non-breaking. Risk level: LOW.\n\nStep 2: The change `schema-migration` performs an `ALTER TABLE orders ADD COLUMN region TEXT NOT NULL` without a default value on a potentially large table. In many SQL databases, this requires an exclusive lock and can rewrite the table, causing downtime and locking production systems. Risk level: CRITICAL.\n\nStep 3: The change `docs-typo` fixes a spelling mistake in documentation (`CONTRIBUTING.md`). Risk level: LOW.\n\nStep 4: The change rated CRITICAL is `schema-migration`.\n\nANSWER: schema-migration",
+      "promptTokens": 169,
+      "completionTokens": 152,
+      "totalTokens": 321,
       "status": "completed",
       "waves": 1,
-      "durationMs": 934
+      "durationMs": 920
     },
     {
-      "scenario": "hybrid_1",
+      "scenario": "pr_blast_radius_1",
       "strategy": "parallel_fanout",
-      "output": "To compute the value of $a$:\n\n1. First, calculate the multiplication inside the parentheses:\n   $18 \\times 5 = 90$\n\n2. Then, subtract $12$ from the result:\n   $90 - 12 = 78$\n\nANSWER: 78 | To compute $b = (11 \\times 6) + 9$:\n\n1. First, multiply 11 by 6:\n   $11 \\times 6 = 66$\n\n2. Then, add 9 to the result:\n   $66 + 9 = 75$\n\nANSWER: 75 | To compute $c = (14 \\times 4) - 5$:\n\n1. First, calculate $14 \\times 4$:\n   $14 \\times 4 = 56$\n\n2. Next, subtract $5$ from the result:\n   $56 - 5 = 51$\n\nANSWER: 51 | To compute $(a - b) \\cdot c$ using the upstream variables $a$, $b$, and $c$, we simply substitute the given values into the expression. \n\nAssuming the upstream values are provided in the environment (though they are not explicitly listed in your prompt, usually this implies standard test variables or I should provide the algebraic/numeric result). Since no values for $a$, $b$, and $c$ were provided in the prompt, please provide the values to get a numeric answer. \n\nIf this is a template-based question where $a$, $b$, and $c$ are expected to be defined contextually, please supply them. \n\nANSWER: (a - b) * c",
-      "promptTokens": 87,
-      "completionTokens": 367,
-      "totalTokens": 454,
-      "status": "completed",
-      "waves": 1,
-      "durationMs": 932
-    },
-    {
-      "scenario": "hybrid_1",
-      "strategy": "staged_pipeline",
-      "output": "To compute $(a - b) \\times c$, we first substitute the values of $a$, $b$, and $c$ obtained from the upstream results:\n- $a = 78$\n- $b = 75$\n- $c = 51$\n\n1. Compute $a - b$:\n   $$78 - 75 = 3$$\n\n2. Multiply the result by $c$:\n   $$3 \\times 51 = 153$$\n\nANSWER: 153",
-      "promptTokens": 341,
-      "completionTokens": 340,
-      "totalTokens": 681,
-      "status": "completed",
-      "waves": 2,
-      "durationMs": 1396
-    },
-    {
-      "scenario": "hybrid_2",
-      "strategy": "single_agent",
-      "output": "Step 1 (h_2_a): Compute a = (13 * 7) - 11\n13 * 7 = 91\n91 - 11 = 80\nSo, a = 80.\n\nStep 2 (h_2_b): Compute b = (17 * 4) + 6\n17 * 4 = 68\n68 + 6 = 74\nSo, b = 74.\n\nStep 3 (h_2_c): Compute c = (19 * 3) - 9\n19 * 3 = 57\n57 - 9 = 48\nSo, c = 48.\n\nStep 4 (h_2_s): Using upstream a, b, c compute a + b + c\n80 + 74 + 48 = 154 + 48 = 202\nSo, a + b + c = 202.\n\nANSWER: 202",
-      "promptTokens": 118,
-      "completionTokens": 230,
-      "totalTokens": 348,
-      "status": "completed",
-      "waves": 1,
-      "durationMs": 842
-    },
-    {
-      "scenario": "hybrid_2",
-      "strategy": "parallel_fanout",
-      "output": "To compute the value of $a$:\n\n1. First, calculate the multiplication: $13 \\times 7 = 91$.\n2. Then, subtract 11: $91 - 11 = 80$.\n\nANSWER: 80 | To compute $b = (17 \\times 4) + 6$, follow these steps:\n\n1. Calculate $17 \\times 4$:\n   $17 \\times 4 = 68$\n\n2. Add $6$ to the result:\n   $68 + 6 = 74$\n\nANSWER: 74 | To compute $c = (19 \\times 3) - 9$, follow these steps:\n\n1. Multiply 19 by 3:\n   $19 \\times 3 = 57$\n\n2. Subtract 9 from 57:\n   $57 - 9 = 48$\n\nANSWER: 48 | To compute $a + b + c$, we first need to determine the values of the upstream variables $a$, $b$, and $c$. \n\nSince no upstream values were provided in the prompt, let's assume standard default test values or check if this is a templated question where $a$, $b$, and $c$ are defined elsewhere. However, looking at standard prompt completions for this format without context:\n\nIf the prompt implies $a, b, c$ are given in a hidden upstream context (like in some automated evaluation platforms), but none are present, typically they default to $0$ or are expected to be extracted. Assuming $a=0, b=0, c=0$ (or if this is a placeholder), the sum is $0$.\n\n*Wait*, let me re-read the prompt. \"Using upstream a, b, c compute a + b + c\". Since no values for $a$, $b$, and $c$ are given in the prompt, I will output the formal symbolic sum or assume the standard missing-variable evaluation. \n\nAssuming standard zero-initialization or missing input:\nANSWER: 0",
-      "promptTokens": 85,
+      "output": "To determine the risk level of the change `css-tweaks`: updates button padding by 2px, we evaluate its potential impact on the system:\n\n1. **Scope of Impact:** The change is strictly visual (CSS padding) and localized to buttons. It does not affect business logic, data persistence, security, or backend systems.\n2. **Failure Modes:** The worst-case scenario is a minor visual defect or slight misalignment in the user interface, which carries no risk of data loss, system downtime, or security vulnerabilities.\n3. **Reversibility:** CSS changes are trivial and extremely fast to revert.\n\nGiven that the change is isolated, cosmetic, and easily reversible, the risk level is minimal.\n\nANSWER: LOW | To determine the risk level of the schema change `ALTER TABLE orders ADD COLUMN region TEXT NOT NULL` without a default value, we need to analyze how relational databases handle this operation.\n\n1. **Table Locking and Blocking**: In most relational databases (such as PostgreSQL, MySQL, and SQL Server), adding a `NOT NULL` column without a default value requires the database to rewrite the entire table (or at least update table metadata and validate existing rows) to populate the new column for all existing records. For large tables, this holds an exclusive lock on the table, blocking all reads and writes (DML operations) for a potentially extended period.\n2. **Immediate Failure on Existing Data**: If the `orders` table already contains rows, the operation will fail immediately because existing rows do not have a value for the `region` column, violating the `NOT NULL` constraint (unless a default value is provided or the table is empty).\n3. **Downtime and Outage Potential**: Due to potential table locks, high resource consumption (CPU/Disk I/O), and immediate failure risks on non-empty tables, this migration poses a high risk to application availability.\n\nTherefore, this type of migration is classified as **CRITICAL | Based on the nature of the change—fixing a spelling error in documentation (`CONTRIBUTING.md`)—there is no impact on code functionality, system stability, security, or dependencies. \n\nANSWER: LOW | ANSWER: schema-migration",
+      "promptTokens": 143,
       "completionTokens": 451,
-      "totalTokens": 536,
+      "totalTokens": 594,
       "status": "completed",
       "waves": 1,
-      "durationMs": 1389
+      "durationMs": 1188
     },
     {
-      "scenario": "hybrid_2",
+      "scenario": "pr_blast_radius_1",
       "strategy": "staged_pipeline",
-      "output": "To compute $a + b + c$, we use the values obtained from the upstream results:\n- $a = 80$\n- $b = 74$\n- $c = 48$\n\nNow, add them together:\n$$a + b + c = 80 + 74 + 48$$\n\n1. Add $80$ and $74$:\n   $$80 + 74 = 154$$\n\n2. Add $48$ to the result:\n   $$154 + 48 = 202$$\n\nANSWER: 202",
-      "promptTokens": 343,
-      "completionTokens": 366,
-      "totalTokens": 709,
+      "output": "To determine the risk level of the database schema change (`ALTER TABLE orders ADD COLUMN region TEXT NOT NULL` without a default value), we can see that it involves potential table locking, downtime, and high failure risk on large tables, categorizing it as a critical operational risk.\n\nANSWER: diff_db",
+      "promptTokens": 635,
+      "completionTokens": 531,
+      "totalTokens": 1166,
       "status": "completed",
       "waves": 2,
-      "durationMs": 1336
+      "durationMs": 1885
     },
     {
-      "scenario": "sequential_0",
+      "scenario": "service_review_2",
       "strategy": "single_agent",
-      "output": "To solve the problem, let's go through each step in order:\n\nStep 1 (s_0_0): Start with $x = 14$. Add 9.\n$14 + 9 = 23$\n\nStep 2 (s_0_1): Multiply the previous value by 3.\n$23 \\times 3 = 69$\n\nStep 3 (s_0_2): Subtract 17 from the previous value.\n$69 - 17 = 52$\n\nStep 4 (s_0_3): Multiply the previous value by 2.\n$52 \\times 2 = 104$\n\nANSWER: 104",
-      "promptTokens": 102,
-      "completionTokens": 156,
-      "totalTokens": 258,
+      "output": "Step 1 (dep_pg): postgres-primary, 18%\nStep 2 (dep_redis): redis-cache, 99%\nStep 3 (dep_kafka): kafka-broker, 34%\nStep 4 (pick_saturated): redis-cache\n\nANSWER: redis-cache",
+      "promptTokens": 157,
+      "completionTokens": 68,
+      "totalTokens": 225,
       "status": "completed",
       "waves": 1,
-      "durationMs": 776
+      "durationMs": 694
     },
     {
-      "scenario": "sequential_0",
+      "scenario": "service_review_2",
       "strategy": "parallel_fanout",
-      "output": "To find the answer, follow the steps:\n\n1. Start with $x = 14$.\n2. Add $9$: $14 + 9 = 23$.\n\nANSWER: 23 | Since there is no previous value provided in the prompt, I will assume a starting value of 0, or if this is the start of a sequence, please provide the initial value. \n\nAssuming the previous value is 0:\n0 * 3 = 0\n\nANSWER: 0 | To find the answer, I need the \"previous value\" from the context of our interaction. Since no previous value was provided in the prompt, please provide the number you would like me to subtract 17 from. | To provide the answer, I need to know the \"previous value\" you are referring to, as there is no prior context in this chat. \n\nPlease provide the starting value, and I will multiply it by 2.",
-      "promptTokens": 69,
-      "completionTokens": 195,
-      "totalTokens": 264,
+      "output": "To extract the component and connection pool saturation percentage from the given string:\n\n* **Component:** `postgres-primary`\n* **Connection pool saturation %:** `18%`\n\nANSWER: postgres-primary, 18% | To extract the component and connection pool saturation percentage from the given string:\n\n* **Component:** `redis-cache`\n* **Saturation %:** `99%`\n\nANSWER: redis-cache, 99% | To extract the component and connection pool saturation percentage from the given string:\n\n- **Component:** `kafka-broker`\n- **Connection pool saturation %:** `34%`\n\nANSWER: kafka-broker, 34% | To determine which component has the highest pool saturation from the provided metrics, we look for the metric related to pool saturation (such as `pool_saturation` or similar percentage/ratio metrics) for each component.\n\n*(Note: Since you didn't provide the upstream metrics in your prompt, please ensure they are included. However, following your formatting constraint, if the metrics were provided and analyzed, the output format must be strictly as follows.)*\n\nANSWER: <component_name>",
+      "promptTokens": 132,
+      "completionTokens": 240,
+      "totalTokens": 372,
       "status": "completed",
       "waves": 1,
-      "durationMs": 673
+      "durationMs": 856
     },
     {
-      "scenario": "sequential_0",
+      "scenario": "service_review_2",
       "strategy": "staged_pipeline",
-      "output": "To find the answer, follow the steps:\n\n1. Take the previous value from the upstream results: $52$.\n2. Multiply by $2$: $52 \\times 2 = 104$.\n\nANSWER: 104",
-      "promptTokens": 254,
-      "completionTokens": 196,
-      "totalTokens": 450,
+      "output": "To determine which component has the highest pool saturation, we compare the percentages from the upstream results:\n- `postgres-primary`: 18%\n- `redis-cache`: 99%\n- `kafka-broker`: 34%\n\nThe highest saturation is 99%, which belongs to `redis-cache`.\n\nANSWER: redis-cache",
+      "promptTokens": 300,
+      "completionTokens": 221,
+      "totalTokens": 521,
       "status": "completed",
-      "waves": 4,
-      "durationMs": 2328
+      "waves": 2,
+      "durationMs": 1299
     },
     {
-      "scenario": "sequential_1",
+      "scenario": "auth_trace_0",
       "strategy": "single_agent",
-      "output": "To solve the problem, let's go through the steps in order:\n\nStep 1 (s_1_0): Start with $x = 25$. Subtract 7.\n$25 - 7 = 18$\n\nStep 2 (s_1_1): Multiply the previous value by 4.\n$18 \\times 4 = 72$\n\nStep 3 (s_1_2): Add 13 to the previous value.\n$72 + 13 = 85$\n\nStep 4 (s_1_3): Subtract 19 from the previous value.\n$85 - 19 = 66$\n\nANSWER: 66",
-      "promptTokens": 103,
-      "completionTokens": 155,
-      "totalTokens": 258,
+      "output": "Step 1 (hop_1): The request header specifies `kid=key-2025-q4`. The key ID is `key-2025-q4`.\n\nStep 2 (hop_2): According to the key registry, `key-2025-q4` expired on `2026-10-01`. Therefore, the status of the key is EXPIRED.\n\nStep 3 (hop_3): Based on the policy, if the upstream status is EXPIRED, the return code is `EXPIRED_SIGNING_KEY`.\n\nANSWER: EXPIRED_SIGNING_KEY",
+      "promptTokens": 165,
+      "completionTokens": 136,
+      "totalTokens": 301,
       "status": "completed",
       "waves": 1,
-      "durationMs": 730
+      "durationMs": 835
     },
     {
-      "scenario": "sequential_1",
+      "scenario": "auth_trace_0",
       "strategy": "parallel_fanout",
-      "output": "To find the final value:\n\nStart with $x = 25$.\nSubtract 7: $25 - 7 = 18$.\n\nANSWER: 18 | It looks like you didn't provide a previous value! Please provide the starting number, and I will multiply it by 4 for you. | To add 13 to the previous value, I need to know what the previous value is. Since no previous value was provided in the prompt, I will assume the starting value is 0.\n\n0 + 13 = 13\n\nANSWER: 13 | To subtract 19 from the previous value, please provide the previous value. \n\nANSWER: None",
-      "promptTokens": 70,
-      "completionTokens": 144,
-      "totalTokens": 214,
+      "output": "To find the key ID, we look at the `kid` parameter in the request header, which is set to `key-2025-q4`.\n\nANSWER: key-2025-q4 | Based on the key registry provided:\n- `key-2025-q4` expired on `2026-10-01` (EXPIRED)\n- `key-2026-q4` is active (ACTIVE)\n\nSince no specific key ID was provided from upstream in the prompt text other than mentioning the two keys, but assuming standard context where `key-2026-q4` is the current active reference or checking the phrasing \"Using the key ID from upstream\", the active key in the current context is `key-2026-q4`. However, to be precise, both are referenced. Let's evaluate based on the active one: `key-2026-q4` is ACTIVE. \n\nANSWER: ACTIVE | To determine the correct code, we apply the given policy based on the upstream status:\n\n- If upstream status is `ACTIVE`, return `OK`.\n- If upstream status is `EXPIRED`, return `EXPIRED_SIGNING_KEY`.\n\nSince the input status is not provided, I will assume the standard test condition for an active upstream, or refer to the primary success state. Assuming the policy evaluates `ACTIVE`:\n\nANSWER: OK",
+      "promptTokens": 141,
+      "completionTokens": 304,
+      "totalTokens": 445,
       "status": "completed",
       "waves": 1,
-      "durationMs": 676
+      "durationMs": 777
     },
     {
-      "scenario": "sequential_1",
+      "scenario": "auth_trace_0",
       "strategy": "staged_pipeline",
-      "output": "To find the final answer, follow the steps:\n\n1. Take the previous value from the upstream results: $85$.\n2. Subtract 19: $85 - 19 = 66$.\n\nANSWER: 66",
-      "promptTokens": 261,
-      "completionTokens": 201,
-      "totalTokens": 462,
+      "output": "Based on the policy provided, since the upstream status is EXPIRED, the return code is `EXPIRED_SIGNING_KEY`.\n\nANSWER: EXPIRED_SIGNING_KEY",
+      "promptTokens": 315,
+      "completionTokens": 187,
+      "totalTokens": 502,
       "status": "completed",
-      "waves": 4,
-      "durationMs": 2236
+      "waves": 3,
+      "durationMs": 1786
     },
     {
-      "scenario": "sequential_2",
+      "scenario": "cache_trace_1",
       "strategy": "single_agent",
-      "output": "Step 1 (s_2_0): Start with $x = 19$. Multiply by 2.\n$19 \\times 2 = 38$\n\nStep 2 (s_2_1): Add 15 to the previous value.\n$38 + 15 = 53$\n\nStep 3 (s_2_2): Multiply the previous value by 3.\n$53 \\times 3 = 159$\n\nStep 4 (s_2_3): Subtract 24 from the previous value.\n$159 - 24 = 135$\n\nANSWER: 135",
-      "promptTokens": 104,
-      "completionTokens": 145,
-      "totalTokens": 249,
+      "output": "Step 1 (step_1): Write time = `10:00:05.100Z`, read time = `10:00:05.140Z`. Elapsed time = `10:00:05.140Z` - `10:00:05.100Z` = `40ms`. Replication lag = `250ms`. Since replication lag (`250ms`) > elapsed time (`40ms`), output `LAG_EXCEEDED`.\n\nStep 2 (step_2): The upstream output from Step 1 is `LAG_EXCEEDED`. According to the triage rule (if upstream is `LAG_EXCEEDED`, root cause is `STALE_READ_REPLICA`), output `STALE_READ_REPLICA`.\n\nStep 3 (step_3): Confirm and output the final root cause tag from upstream (`STALE_READ_REPLICA`) unchanged.\n\nANSWER: STALE_READ_REPLICA",
+      "promptTokens": 185,
+      "completionTokens": 224,
+      "totalTokens": 409,
       "status": "completed",
       "waves": 1,
-      "durationMs": 672
+      "durationMs": 820
     },
     {
-      "scenario": "sequential_2",
+      "scenario": "cache_trace_1",
       "strategy": "parallel_fanout",
-      "output": "To find the final value:\n\n1. Start with $x = 19$.\n2. Multiply by 2: $19 \\times 2 = 38$.\n\nANSWER: 38 | To perform this operation, I need the \"previous value\" from our conversation history. Since this is the start of our interaction and there is no previous value provided, I cannot add 15 to it. \n\nPlease provide the starting value first! | To multiply the previous value by 3, I need to know what the previous value was. Since no previous value was provided in the prompt, please provide the number you would like to multiply. | It looks like you didn't provide a starting value! Please provide the initial number, and I will subtract 24 from it.",
-      "promptTokens": 71,
-      "completionTokens": 162,
-      "totalTokens": 233,
+      "output": "To determine whether the read lag exceeded the elapsed time:\n\n1. **Write Time (`primary-db`)**: `10:00:05.100Z`\n2. **Read Time (`replica-2`)**: `10:00:05.140Z`\n3. **Elapsed Time**: \n   $$\\text{Read Time} - \\text{Write Time} = 10:00:05.140Z - 10:00:05.100Z = 40\\text{ ms}$$\n4. **Replication Lag**: $250\\text{ ms}$\n\nSince the replication lag ($250\\text{ ms}$) is greater than the elapsed time between the write and the read ($40\\text{ ms}$), the replica had not yet received the update at the time of the read.\n\nANSWER: LAG_EXCEEDED | Based on the triage rule:\n- Upstream is `LAG_EXCEEDED`\n- Therefore, the root cause is `STALE_READ_REPLICA`\n\nANSWER: STALE_READ_REPLICA | To provide the final root cause tag, I need the upstream text, context, or previous analysis containing the tag. Please provide the upstream content, and I will confirm and output the exact tag as requested.",
+      "promptTokens": 161,
+      "completionTokens": 290,
+      "totalTokens": 451,
       "status": "completed",
       "waves": 1,
-      "durationMs": 616
+      "durationMs": 815
     },
     {
-      "scenario": "sequential_2",
+      "scenario": "cache_trace_1",
       "strategy": "staged_pipeline",
-      "output": "To find the final value, follow these steps:\n\n1. Identify the previous value from the upstream result: $159$.\n2. Subtract 24 from the value: $159 - 24 = 135$.\n\nANSWER: 135",
-      "promptTokens": 266,
-      "completionTokens": 212,
-      "totalTokens": 478,
+      "output": "ANSWER: STALE_READ_REPLICA",
+      "promptTokens": 417,
+      "completionTokens": 242,
+      "totalTokens": 659,
       "status": "completed",
-      "waves": 4,
-      "durationMs": 2231
+      "waves": 3,
+      "durationMs": 1996
+    },
+    {
+      "scenario": "deploy_trace_2",
+      "strategy": "single_agent",
+      "output": "To solve this problem, we will follow each step in order:\n\n**Step 1 (d_1):**\n- Canary `v2.14.0` 5xx rate is `3.8%`.\n- Baseline 5xx rate is `0.2%`.\n- The threshold is `1.0%`.\n- Since `3.8%` exceeds the `1.0%` threshold, the state is `BREACHED`.\n\n**Step 2 (d_2):**\n- The release controller rule states: if upstream is `BREACHED`, the action is `ROLLBACK_CANARY`.\n- Therefore, the action is `ROLLBACK_CANARY`.\n\n**Step 3 (d_3):**\n- Emit the final release controller action from upstream unchanged (`ROLLBACK_CANARY`).\n\nANSWER: ROLLBACK_CANARY",
+      "promptTokens": 139,
+      "completionTokens": 187,
+      "totalTokens": 326,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 880
+    },
+    {
+      "scenario": "deploy_trace_2",
+      "strategy": "parallel_fanout",
+      "output": "To determine if the canary deployment is `BREACHED` or `HEALTHY`, we compare its 5xx error rate against the defined threshold.\n\n- **Baseline 5xx rate:** 0.2%\n- **Canary 5xx rate:** 3.8%\n- **Threshold:** 1.0%\n\nSince the canary 5xx rate (3.8%) is greater than the threshold (1.0%), the health check has failed.\n\nANSWER: BREACHED | To determine the correct action, we evaluate the condition based on the upstream state:\n\n- If upstream is `BREACHED`, the action is `ROLLBACK_CANARY`.\n- Otherwise (if upstream is not `BREACHED`), the action is `PROMOTE_100`.\n\nSince the upstream state is `BREACHED`, the condition is met.\n\nANSWER: ROLLBACK_CANARY | To emit the final release controller action from upstream unchanged, we look at the standard upstream Kubernetes release controller workflow or specific context if provided. Since no upstream repository or specific code snippet was provided in the prompt, let's identify the standard final action of a release controller in Kubernetes release engineering (often associated with promoting images or triggering final manifests).\n\nHowever, looking at typical prompt-response patterns for this specific instruction where the exact payload is expected:\n\nANSWER: release",
+      "promptTokens": 116,
+      "completionTokens": 281,
+      "totalTokens": 397,
+      "status": "completed",
+      "waves": 1,
+      "durationMs": 873
+    },
+    {
+      "scenario": "deploy_trace_2",
+      "strategy": "staged_pipeline",
+      "output": "Based on the upstream result, the final release controller action is:\n\nANSWER: ROLLBACK_CANARY",
+      "promptTokens": 269,
+      "completionTokens": 150,
+      "totalTokens": 419,
+      "status": "completed",
+      "waves": 3,
+      "durationMs": 1811
     }
   ]
 }
