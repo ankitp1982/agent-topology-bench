@@ -14,12 +14,14 @@ test("replay suite is deterministic over recorded Gemini traces", () => {
   assert.ok(a.p95RoutingMs >= 0 && b.p95RoutingMs >= 0);
 });
 
-test("auto_routed outperforms forced parallel_fanout on recorded workloads", () => {
+test("auto_routed matches staged_pipeline accuracy with fewer tokens than forced pipeline", () => {
   const dataset = loadRecordedTraces();
   const autoRes = runReplaySuite(dataset, "auto_routed");
   const forcedParallel = runReplaySuite(dataset, "parallel_fanout");
+  const stagedRes = runReplaySuite(dataset, "staged_pipeline");
   assert.ok(autoRes.accuracyRate > forcedParallel.accuracyRate);
-  assert.ok(autoRes.avgTokens < forcedParallel.avgTokens);
+  assert.ok(autoRes.accuracyRate >= stagedRes.accuracyRate);
+  assert.ok(autoRes.avgTokens < stagedRes.avgTokens);
 });
 
 test("extractAnswer and scoreRecordedRun handle valid, multi-leaf, and faulty outputs", () => {
