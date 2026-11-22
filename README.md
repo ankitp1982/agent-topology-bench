@@ -33,20 +33,20 @@ Equivalent npm scripts are defined in `package.json` (`npm test`, `npm run bench
 
 | Strategy | Accuracy (%) | Avg Tokens / Task | p95 Route Latency (ms) |
 |---|---|---|---|
-| single_agent | 77.8% (7/9) | 446 | < 0.02 ms |
-| parallel_fanout | 33.3% (3/9) | 743 | < 0.02 ms |
-| staged_pipeline | 77.8% (7/9) | 772 | < 0.02 ms |
-| auto_routed | 88.9% (8/9) | 564 | < 0.02 ms |
+| single_agent | 66.7% (6/9) | 303 | < 0.01 ms |
+| parallel_fanout | 33.3% (3/9) | 355 | < 0.01 ms |
+| staged_pipeline | 100.0% (9/9) | 513 | < 0.01 ms |
+| auto_routed | 100.0% (9/9) | 440 | < 0.15 ms |
 
 Large-graph scaling on Apple Silicon (`measureLargeDagRoutingMs` in `run_experiment.ts`):
-- 100-node DAG analysis: `0.057 ms`
-- 1000-node DAG analysis: `0.7339 ms`
+- 100-node DAG analysis: `0.0816 ms`
+- 1000-node DAG analysis: `0.6088 ms`
 
 Notes from the replay numbers:
-- `auto_routed` reaches `88.9%` (`8/9`) accuracy while averaging `564` tokens per task, beating forced `parallel_fanout` (`33.3%`, `743` tokens) by `55.6` percentage points with `24.1%` fewer tokens (`179` fewer tokens per task).
-- Compared to `staged_pipeline` (`77.8%`, `772` tokens), `auto_routed` gains `11.1` percentage points in accuracy and saves `208` tokens per task (`26.9%` fewer tokens) by keeping sequential chains on a single agent.
-- Compared to `single_agent` (`77.8%`, `446` tokens), `auto_routed` gains `11.1` percentage points in accuracy for `+118` avg tokens per task by fanning out independent subtasks.
-- Pre-flight structural routing (`analyzeTopology`) takes under `0.02 ms` p95 across the 9 recorded workloads (exact sub-millisecond values printed by `run_experiment.ts` vary slightly with V8 JIT warmup).
+- `auto_routed` matches `staged_pipeline` at `100.0%` (`9/9`) accuracy while averaging `440` tokens per task (`14.2%` fewer tokens than always running `staged_pipeline` at `513` tokens).
+- `single_agent` uses the fewest tokens (`303`) but drops to `66.7%` (`6/9`) when cramming multi-step dependencies into one prompt.
+- Forced `parallel_fanout` collapses to `33.3%` (`3/9`) because hybrid and sequential chains lose upstream state (emitting short refusals at `355` avg tokens).
+- Pre-flight structural routing (`analyzeTopology`) takes under `0.15 ms` p95 across the 9 recorded workloads.
 
 ## Tradeoffs, Caveats & Next Steps
 - **Why zero external packages:** Keeping `topology.ts`, `scheduler.ts`, `trace_recorder.ts`, and `replay.ts` in pure TypeScript with Node's built-in test runner means zero `npm install` wait and sub-millisecond startup.
