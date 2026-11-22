@@ -28,24 +28,24 @@ GEMINI_API_KEY=... node trace_recorder.ts
 
 Equivalent npm scripts are defined in `package.json` (`npm test`, `npm run bench`).
 
-## Measured Results (9 Recorded `gemini-3.5-flash-lite` Workloads)
-`run_experiment.ts` replays `traces/recorded_runs.json` across 9 recorded workloads spanning `parallel_independent`, `hybrid_pipeline`, and `sequential_coupled` task graphs (`temperature: 0.1`, `maxOutputTokens: 256`, `maxConcurrency: 1` for `single_agent` and `4` for multi-node strategies):
+## Measured Results (9 Recorded `gemini-3.5-flash-lite` Engineering Workloads)
+`run_experiment.ts` replays `traces/recorded_runs.json` across 9 software-engineering DAG workloads spanning parallel code/config security audits, hybrid incident triage and PR blast-radius synthesis, and sequential multi-hop auth/cache/deploy traces (`temperature: 0.1`, `maxOutputTokens: 256`, `maxConcurrency: 1` for `single_agent` and `4` for multi-node strategies):
 
 | Strategy | Accuracy (%) | Avg Tokens / Task | p95 Route Latency (ms) |
 |---|---|---|---|
-| single_agent | 66.7% (6/9) | 303 | < 0.01 ms |
-| parallel_fanout | 33.3% (3/9) | 355 | < 0.01 ms |
-| staged_pipeline | 100.0% (9/9) | 513 | < 0.01 ms |
-| auto_routed | 100.0% (9/9) | 440 | < 0.15 ms |
+| single_agent | 77.8% (7/9) | 350 | < 0.01 ms |
+| parallel_fanout | 33.3% (3/9) | 471 | < 0.01 ms |
+| staged_pipeline | 88.9% (8/9) | 629 | < 0.01 ms |
+| auto_routed | 88.9% (8/9) | 567 | < 0.15 ms |
 
 Large-graph scaling on Apple Silicon (`measureLargeDagRoutingMs` in `run_experiment.ts`):
-- 100-node DAG analysis: `0.0816 ms`
-- 1000-node DAG analysis: `0.6088 ms`
+- 100-node DAG analysis: `0.4208 ms`
+- 1000-node DAG analysis: `0.668 ms`
 
 Notes from the replay numbers:
-- `auto_routed` matches `staged_pipeline` at `100.0%` (`9/9`) accuracy while averaging `440` tokens per task (`14.2%` fewer tokens than always running `staged_pipeline` at `513` tokens).
-- `single_agent` uses the fewest tokens (`303`) but drops to `66.7%` (`6/9`) when cramming multi-step dependencies into one prompt.
-- Forced `parallel_fanout` collapses to `33.3%` (`3/9`) because hybrid and sequential chains lose upstream state (emitting short refusals at `355` avg tokens).
+- `auto_routed` matches `staged_pipeline` at `88.9%` (`8/9`) accuracy while averaging `567` tokens per task (`9.9%` fewer tokens than always running `staged_pipeline` at `629` tokens).
+- `single_agent` uses the fewest tokens (`350`) but drops to `77.8%` (`7/9`) when bundling multiple code-audit snippets or hops into a single prompt.
+- Forced `parallel_fanout` collapses to `33.3%` (`3/9`) because hybrid and sequential traces lose upstream context.
 - Pre-flight structural routing (`analyzeTopology`) takes under `0.15 ms` p95 across the 9 recorded workloads.
 
 ## Tradeoffs, Caveats & Next Steps
